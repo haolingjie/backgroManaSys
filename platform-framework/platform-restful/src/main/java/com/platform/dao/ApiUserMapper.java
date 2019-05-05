@@ -1,7 +1,6 @@
 package com.platform.dao;
 
-import com.platform.entity.UserVo;
-import org.apache.ibatis.annotations.Param;
+import com.platform.entity.vo.UserVo;
 
 /**
  * 用户

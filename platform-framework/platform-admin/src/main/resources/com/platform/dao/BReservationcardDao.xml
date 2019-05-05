@@ -10,7 +10,6 @@
         <result property="comcode" column="comCode"/>
         <result property="username" column="userName"/>
         <result property="sex" column="sex"/>
-        <result property="maritalstatus" column="maritalstatus"/>
         <result property="identitycard" column="identityCard"/>
         <result property="phobenumber" column="phobeNumber"/>
         <result property="medicalcode" column="medicalCode"/>

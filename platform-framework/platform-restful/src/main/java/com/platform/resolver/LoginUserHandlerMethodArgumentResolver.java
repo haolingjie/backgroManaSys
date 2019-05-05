@@ -1,7 +1,7 @@
 package com.platform.resolver;
 
 import com.platform.annotation.LoginUser;
-import com.platform.entity.UserVo;
+import com.platform.entity.vo.UserVo;
 import com.platform.interceptor.AuthorizationInterceptor;
 import com.platform.service.ApiUserService;
 import org.springframework.core.MethodParameter;

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.platform.dao.ApiUserMapper">
 
-    <resultMap type="com.platform.entity.UserVo" id="restUserMap">
+    <resultMap type="com.platform.entity.vo.UserVo" id="restUserMap">
         <result property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
         <result property="passWord" column="pass_word"/>
@@ -13,7 +13,7 @@
         <result property="weixinOpenid" column="weixin_openid"/>
     </resultMap>
 
-    <select id="queryObject" resultType="com.platform.entity.UserVo">
+    <select id="queryObject" resultType="com.platform.entity.vo.UserVo">
 		select
 			`user_id`,
 			`user_name`,
@@ -26,7 +26,7 @@
 		where user_id = #{id}
 	</select>
 
-    <select id="queryList" resultType="com.platform.entity.UserVo">
+    <select id="queryList" resultType="com.platform.entity.vo.UserVo">
         select
         `user_id`,
         `user_name`,
@@ -55,7 +55,7 @@
         WHERE 1=1
     </select>
 
-    <insert id="save" parameterType="com.platform.entity.UserVo" useGeneratedKeys="true" keyProperty="userId">
+    <insert id="save" parameterType="com.platform.entity.vo.UserVo" useGeneratedKeys="true" keyProperty="userId">
 		insert into rest_user(
 			`user_name`,
 			`pass_word`,
@@ -72,7 +72,7 @@
 			#{weixinOpenid})
 	</insert>
 
-    <update id="update" parameterType="com.platform.entity.UserVo">
+    <update id="update" parameterType="com.platform.entity.vo.UserVo">
         update rest_user
         <set>
             <if test="userName != null">`user_name` = #{userName}, </if>

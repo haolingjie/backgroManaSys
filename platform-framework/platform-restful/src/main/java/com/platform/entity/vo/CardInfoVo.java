@@ -1,4 +1,4 @@
-package com.platform.entity;
+package com.platform.entity.vo;
 
 import java.io.Serializable;
 

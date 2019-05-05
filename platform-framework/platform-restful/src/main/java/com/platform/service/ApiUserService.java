@@ -1,8 +1,7 @@
 package com.platform.service;
 
 import com.platform.dao.ApiUserMapper;
-import com.platform.entity.UserVo;
-import com.platform.utils.IdUtil;
+import com.platform.entity.vo.UserVo;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

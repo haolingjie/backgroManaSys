@@ -39,11 +39,6 @@ public class BReservationcardEntity implements Serializable {
      * 性别
      */
     private String sex;
-
-    /**
-     * 婚姻状态 0未婚 1已婚
-     */
-    private String maritalstatus;
     /**
      * 身份证号
      */
@@ -158,15 +153,6 @@ public class BReservationcardEntity implements Serializable {
     public String getSex() {
         return sex;
     }
-
-    public String getMaritalstatus() {
-        return maritalstatus;
-    }
-
-    public void setMaritalstatus(String maritalstatus) {
-        this.maritalstatus = maritalstatus;
-    }
-
     /**
      * 设置：身份证号
      */

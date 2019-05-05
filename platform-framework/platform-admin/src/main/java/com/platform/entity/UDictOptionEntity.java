@@ -25,12 +25,6 @@ public class UDictOptionEntity implements Serializable {
      * 明细名称
      */
     private String optionname;
-
-    /**
-     * 组id
-     */
-    private String groupCodeId;
-
     /**
      * 明细主要说明
      */
@@ -91,15 +85,6 @@ public class UDictOptionEntity implements Serializable {
     public String getOptionname() {
         return optionname;
     }
-
-    public String getGroupCodeId() {
-        return groupCodeId;
-    }
-
-    public void setGroupCodeId(String groupCodeId) {
-        this.groupCodeId = groupCodeId;
-    }
-
     /**
      * 设置：明细主要说明
      */

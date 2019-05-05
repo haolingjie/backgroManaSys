@@ -2,10 +2,11 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
-import com.platform.entity.CardInfoVo;
+import com.platform.entity.vo.CardInfoVo;
 import com.platform.entity.WXLoginVO;
 import com.platform.model.page.BusiReservationCardPage;
 import com.platform.service.ApiCardService;
+import com.platform.service.ApiUMedicalecenterService;
 import com.platform.util.wechat.medicalAppointment.LoginUtil;
 import com.platform.utils.ExceptionUtil;
 import com.platform.utils.R;
@@ -27,6 +28,9 @@ public class ApiWeChatController {
     
     @Autowired
     private ApiCardService apiCardService;
+
+    @Autowired
+    private ApiUMedicalecenterService apiUMedicalecenterService;
     private static Logger log = LoggerFactory.getLogger(ApiWeChatController.class);
 
     @ApiOperation(value = "微信登陆", notes = "微信登陆")
@@ -72,14 +76,29 @@ public class ApiWeChatController {
     @IgnoreAuth
     @PostMapping("/editCardInfo")
     public R editCardInfo(@RequestBody CardInfoVo cardInfoVo) {
+        log.info("卡片信息接口入参"+ JSONObject.toJSONString(cardInfoVo));
         BusiReservationCardPage cardPage = new BusiReservationCardPage();
         try {
             BeanUtils.copyProperties(cardPage,cardInfoVo);
             cardPage.setOperatetime(new Date());
             apiCardService.update(cardPage);
         }catch (Exception e){
-            log.info("微信修改卡片信息异常"+ JSONObject.toJSONString(cardInfoVo)+ ExceptionUtil.getStackTrace(e));
+            log.error("微信修改卡片信息异常"+ JSONObject.toJSONString(cardInfoVo)+ ExceptionUtil.getStackTrace(e));
         }
         return R.ok();
+    }
+
+    @ApiOperation(value = "选择体检机构信息", notes = "选择体检机构信息")
+    @IgnoreAuth
+    @PostMapping("/selectOrgan")
+    public R selectOrgan() {
+        Map<String, Object> medicalCenterMap=null;
+        try {
+            medicalCenterMap = apiUMedicalecenterService.queryCenterAddress();
+            log.info("选择体检机构信息结果"+JSONObject.toJSONString(medicalCenterMap));
+        }catch (Exception e){
+            log.error("选择体检机构信息异常"+ ExceptionUtil.getStackTrace(e));
+        }
+        return R.ok(medicalCenterMap);
     }
 }
