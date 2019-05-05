@@ -5,19 +5,38 @@ import java.io.Serializable;
 public class CardInfoVo implements Serializable {
 
 
+    /**
+     * 卡号
+     */
     private String cardcode;
-
+    /**
+     * 密码
+     */
     private String username;
-
+    /**
+     * 身份证号
+     */
     private String identitycard;
-
+    /**
+     * 性别
+     */
     private String sex;
-
+    /**
+     * 婚姻状态 0未婚 1已婚
+     */
     private String maritalstatus;
-
+    /**
+     * 寄送地址
+     */
     private String sendaddress;
-
+    /**
+     * 手机号
+     */
     private String phobenumber;
+    /**
+     * 体检中心地址
+     */
+    private String medicalcode;
 
     public String getCardcode() {
         return cardcode;
@@ -73,5 +92,13 @@ public class CardInfoVo implements Serializable {
 
     public void setPhobenumber(String phobenumber) {
         this.phobenumber = phobenumber;
+    }
+
+    public String getMedicalcode() {
+        return medicalcode;
+    }
+
+    public void setMedicalcode(String medicalcode) {
+        this.medicalcode = medicalcode;
     }
 }

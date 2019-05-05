@@ -44,6 +44,17 @@
 		select cityCode,cityName from u_medicalecenter  GROUP  BY cityCode;
 	</select>
 
+	<select id="queryCenterInfoByVo" resultType="com.platform.entity.UMedicalecenterEntity" parameterType="com.platform.entity.vo.MedicalCenterVO">
+		select `id`,
+				`cityCode`,
+				`cityName`,
+				`areaCode`,
+				`areaName`,
+				`medicalBrandName`,
+				`medicalECenterName`,
+				`medicalECenterAddress` from u_medicalecenter where
+				`cityCode` = #{citycode} and `areaCode` = #{areacode}
+	</select>
 	<select id="queryList" resultType="com.platform.entity.UMedicalecenterEntity">
 		select
     		`id`,

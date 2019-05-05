@@ -1,6 +1,7 @@
 package com.platform.dao;
 
 import com.platform.entity.UMedicalecenterEntity;
+import com.platform.entity.vo.MedicalCenterVO;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface ApiUMedicalecenterDao extends BaseDao<UMedicalecenterEntity> {
     public List<UMedicalecenterEntity> queryCityAddress ();
 
     public List<UMedicalecenterEntity> queryAreaAddress ();
+
+    public List<UMedicalecenterEntity> queryCenterInfoByVo(MedicalCenterVO medicalCenterVO);
 }

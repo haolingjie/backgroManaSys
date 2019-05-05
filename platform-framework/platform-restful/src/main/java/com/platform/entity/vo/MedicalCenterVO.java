@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class MedicalCenterVO implements Serializable {
 
+    private String id;
+
     /**
      * 城市代码
      */
@@ -20,6 +22,14 @@ public class MedicalCenterVO implements Serializable {
      * 地区名称
      */
     private String areaname;
+    /**
+     * 体检中心名称
+     */
+    private String medicalecentername;
+    /**
+     * 体检中心地址
+     */
+    private String medicalecenteraddress;
 
     public String getCitycode() {
         return citycode;
@@ -51,5 +61,29 @@ public class MedicalCenterVO implements Serializable {
 
     public void setAreaname(String areaname) {
         this.areaname = areaname;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getMedicalecentername() {
+        return medicalecentername;
+    }
+
+    public void setMedicalecentername(String medicalecentername) {
+        this.medicalecentername = medicalecentername;
+    }
+
+    public String getMedicalecenteraddress() {
+        return medicalecenteraddress;
+    }
+
+    public void setMedicalecenteraddress(String medicalecenteraddress) {
+        this.medicalecenteraddress = medicalecenteraddress;
     }
 }

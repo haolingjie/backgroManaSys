@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.entity.vo.CardInfoVo;
 import com.platform.entity.WXLoginVO;
+import com.platform.entity.vo.MedicalCenterVO;
 import com.platform.model.page.BusiReservationCardPage;
 import com.platform.service.ApiCardService;
 import com.platform.service.ApiUMedicalecenterService;
@@ -88,17 +89,33 @@ public class ApiWeChatController {
         return R.ok();
     }
 
-    @ApiOperation(value = "选择体检机构信息", notes = "选择体检机构信息")
+    @ApiOperation(value = "选择体检机构地区", notes = "选择体检机构地区")
     @IgnoreAuth
-    @PostMapping("/selectOrgan")
-    public R selectOrgan() {
+    @PostMapping("/selectOrganArea")
+    public R selectOrganArea() {
         Map<String, Object> medicalCenterMap=null;
         try {
             medicalCenterMap = apiUMedicalecenterService.queryCenterAddress();
-            log.info("选择体检机构信息结果"+JSONObject.toJSONString(medicalCenterMap));
+            log.info("选择体检机构地区结果"+JSONObject.toJSONString(medicalCenterMap));
+        }catch (Exception e){
+            log.error("选择体检机构地区异常"+ ExceptionUtil.getStackTrace(e));
+        }
+        return R.ok(medicalCenterMap);
+    }
+
+    @ApiOperation(value = "选择体检机构信息", notes = "选择体检机构信息")
+    @IgnoreAuth
+    @PostMapping("/selectOrgan")
+    public R selectOrgan(@RequestBody MedicalCenterVO medicalCenterVO) {
+        HashMap<String, Object> returnMap = new HashMap<>();
+        log.info("选择体检机构信息入参:"+medicalCenterVO);
+        try {
+            List<MedicalCenterVO>  medicalCenterVOs= apiUMedicalecenterService.queryCenterInfoByVo(medicalCenterVO);
+            returnMap.put("medicalCenterVOs",medicalCenterVOs);
+            log.info("选择体检机构信息结果"+JSONObject.toJSONString(medicalCenterVOs));
         }catch (Exception e){
             log.error("选择体检机构信息异常"+ ExceptionUtil.getStackTrace(e));
         }
-        return R.ok(medicalCenterMap);
+        return R.ok(returnMap);
     }
 }

@@ -92,4 +92,23 @@ public class ApiUMedicalecenterServiceImpl implements ApiUMedicalecenterService 
         return addressMap;
     }
 
+    /**
+     * 根据城市代码，地区代码查询体检中心信息
+     * @return
+     */
+    @Override
+    public List<MedicalCenterVO> queryCenterInfoByVo(MedicalCenterVO medicalCenterVO) throws Exception{
+        List<UMedicalecenterEntity> areacenterEntities = uMedicalecenterDao.queryCenterInfoByVo(medicalCenterVO);
+        List<MedicalCenterVO> medicalCenterVOS = new ArrayList<MedicalCenterVO>();
+        if(areacenterEntities != null && areacenterEntities.size()>0){
+            for (UMedicalecenterEntity entity:areacenterEntities) {
+                MedicalCenterVO resultVO = new MedicalCenterVO();
+                BeanUtils.copyProperties(resultVO,entity);
+                medicalCenterVOS.add(resultVO);
+            }
+        }
+        return medicalCenterVOS;
+    }
+
+
 }

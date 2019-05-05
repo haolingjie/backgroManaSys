@@ -1,6 +1,7 @@
 package com.platform.service;
 
 import com.platform.entity.UMedicalecenterEntity;
+import com.platform.entity.vo.MedicalCenterVO;
 
 import java.util.List;
 import java.util.Map;
@@ -71,4 +72,6 @@ public interface ApiUMedicalecenterService {
 
 
     public Map<String, Object> queryCenterAddress() throws Exception;
+
+    public List<MedicalCenterVO> queryCenterInfoByVo(MedicalCenterVO medicalCenterVO) throws Exception;
 }
