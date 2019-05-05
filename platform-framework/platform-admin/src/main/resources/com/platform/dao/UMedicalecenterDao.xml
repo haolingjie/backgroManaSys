@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.UMedicalecenterDao">
+
+    <resultMap type="com.platform.entity.UMedicalecenterEntity" id="uMedicalecenterMap">
+        <result property="id" column="id"/>
+        <result property="citycode" column="cityCode"/>
+        <result property="cityname" column="cityName"/>
+        <result property="areacode" column="areaCode"/>
+        <result property="areaname" column="areaName"/>
+        <result property="medicalbrandcode" column="medicalBrandCode"/>
+        <result property="medicalbrandname" column="medicalBrandName"/>
+        <result property="medicalecentercode" column="medicalECenterCode"/>
+        <result property="medicalecentername" column="medicalECenterName"/>
+        <result property="medicalecenteraddress" column="medicalECenterAddress"/>
+        <result property="inserttime" column="insertTime"/>
+        <result property="operatetime" column="operateTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.platform.entity.UMedicalecenterEntity">
+		select
+			`id`,
+			`cityCode`,
+			`cityName`,
+			`areaCode`,
+			`areaName`,
+			`medicalBrandCode`,
+			`medicalBrandName`,
+			`medicalECenterCode`,
+			`medicalECenterName`,
+			`medicalECenterAddress`,
+			`insertTime`,
+			`operateTime`
+		from u_medicalecenter
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.platform.entity.UMedicalecenterEntity">
+		select
+    		`id`,
+    		`cityCode`,
+    		`cityName`,
+    		`areaCode`,
+    		`areaName`,
+    		`medicalBrandCode`,
+    		`medicalBrandName`,
+    		`medicalECenterCode`,
+    		`medicalECenterName`,
+    		`medicalECenterAddress`,
+    		`insertTime`,
+    		`operateTime`
+		from u_medicalecenter
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from u_medicalecenter
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.platform.entity.UMedicalecenterEntity">
+		insert into u_medicalecenter(
+			`id`,
+			`cityCode`,
+			`cityName`,
+			`areaCode`,
+			`areaName`,
+			`medicalBrandCode`,
+			`medicalBrandName`,
+			`medicalECenterCode`,
+			`medicalECenterName`,
+			`medicalECenterAddress`,
+			`insertTime`,
+			`operateTime`)
+		values(
+			#{id},
+			#{citycode},
+			#{cityname},
+			#{areacode},
+			#{areaname},
+			#{medicalbrandcode},
+			#{medicalbrandname},
+			#{medicalecentercode},
+			#{medicalecentername},
+			#{medicalecenteraddress},
+			#{inserttime},
+			#{operatetime})
+	</insert>
+	 
+	<update id="update" parameterType="com.platform.entity.UMedicalecenterEntity">
+		update u_medicalecenter 
+		<set>
+			<if test="citycode != null">`cityCode` = #{citycode}, </if>
+			<if test="cityname != null">`cityName` = #{cityname}, </if>
+			<if test="areacode != null">`areaCode` = #{areacode}, </if>
+			<if test="areaname != null">`areaName` = #{areaname}, </if>
+			<if test="medicalbrandcode != null">`medicalBrandCode` = #{medicalbrandcode}, </if>
+			<if test="medicalbrandname != null">`medicalBrandName` = #{medicalbrandname}, </if>
+			<if test="medicalecentercode != null">`medicalECenterCode` = #{medicalecentercode}, </if>
+			<if test="medicalecentername != null">`medicalECenterName` = #{medicalecentername}, </if>
+			<if test="medicalecenteraddress != null">`medicalECenterAddress` = #{medicalecenteraddress}, </if>
+			<if test="inserttime != null">`insertTime` = #{inserttime}, </if>
+			<if test="operatetime != null">`operateTime` = #{operatetime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from u_medicalecenter where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from u_medicalecenter where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

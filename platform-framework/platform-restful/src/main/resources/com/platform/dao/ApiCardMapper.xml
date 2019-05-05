@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiCardMapper">
+
+    <resultMap type="com.platform.model.page.BusiReservationCardPage" id="bReservationcardMap">
+        <result property="id" column="id"/>
+        <result property="cardcode" column="cardCode"/>
+        <result property="password" column="passWord"/>
+        <result property="comcode" column="comCode"/>
+        <result property="username" column="userName"/>
+        <result property="sex" column="sex"/>
+        <result property="maritalstatus" column="maritalstatus"/>
+        <result property="identitycard" column="identityCard"/>
+        <result property="phobenumber" column="phobeNumber"/>
+        <result property="medicalcode" column="medicalCode"/>
+        <result property="medicaldate" column="medicalDate"/>
+        <result property="cardstatus" column="cardStatus"/>
+        <result property="sendaddress" column="sendAddress"/>
+        <result property="inserttime" column="insertTime"/>
+        <result property="operatetime" column="operateTime"/>
+    </resultMap>
+
+    <select id="queryObjectByPage" resultMap="bReservationcardMap" parameterType="com.platform.model.page.BusiReservationCardPage">
+        SELECT * FROM b_reservationcard WHERE 1=1
+        <if test="cardcode != null">
+            and cardcode = #{cardcode}
+        </if>
+        <if test="identitycard != null">
+            and identitycard = #{identitycard}
+        </if>
+        <if test="password != null">
+            and password = #{password}
+        </if>
+    </select>
+
+    <select id="queryObject" resultType="com.platform.entity.BReservationcardEntity">
+		select
+			`id`,
+			`cardCode`,
+			`passWord`,
+			`comCode`,
+			`userName`,
+			`sex`,
+			`identityCard`,
+			`phobeNumber`,
+			`medicalCode`,
+			`medicalDate`,
+			`cardStatus`,
+			`sendAddress`,
+			`insertTime`,
+			`operateTime`
+		from b_reservationcard
+		where id = #{id}
+	</select>
+
+    <select id="queryList" resultType="com.platform.entity.BReservationcardEntity">
+        select
+        `id`,
+        `cardCode`,
+        `passWord`,
+        `comCode`,
+        `userName`,
+        `sex`,
+        `identityCard`,
+        `phobeNumber`,
+        `medicalCode`,
+        `medicalDate`,
+        `cardStatus`,
+        `sendAddress`,
+        `insertTime`,
+        `operateTime`
+        from b_reservationcard
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+            <otherwise>
+                order by id desc
+            </otherwise>
+        </choose>
+        <if test="offset != null and limit != null">
+            limit #{offset}, #{limit}
+        </if>
+    </select>
+
+    <select id="queryTotal" resultType="int">
+        select count(*) from b_reservationcard
+        WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+    </select>
+
+    <insert id="save" parameterType="com.platform.entity.BReservationcardEntity">
+		insert into b_reservationcard(
+			`id`,
+			`cardCode`,
+			`passWord`,
+			`comCode`,
+			`userName`,
+			`sex`,
+			`identityCard`,
+			`phobeNumber`,
+			`medicalCode`,
+			`medicalDate`,
+			`cardStatus`,
+			`sendAddress`,
+			`insertTime`,
+			`operateTime`)
+		values(
+			#{id},
+			#{cardcode},
+			#{password},
+			#{comcode},
+			#{username},
+			#{sex},
+			#{identitycard},
+			#{phobenumber},
+			#{medicalcode},
+			#{medicaldate},
+			#{cardstatus},
+			#{sendaddress},
+			#{inserttime},
+			#{operatetime})
+	</insert>
+
+    <insert id="saveList" parameterType="java.util.List">
+        insert into b_reservationcard(
+        `id`,
+        `cardCode`,
+        `passWord`,
+        `comCode`,
+        `userName`,
+        `sex`,
+        `identityCard`,
+        `phobeNumber`,
+        `medicalCode`,
+        `medicalDate`,
+        `cardStatus`,
+        `sendAddress`,
+        `insertTime`,
+        `operateTime`)
+        values
+        <foreach collection ="list" item="card" index= "index" separator =",">
+            (
+            #{card.id},
+            #{card.cardcode},
+            #{card.password},
+            #{card.comcode},
+            #{card.username},
+            #{card.sex},
+            #{card.identitycard},
+            #{card.phobenumber},
+            #{card.medicalcode},
+            #{card.medicaldate},
+            #{card.cardstatus},
+            #{card.sendaddress},
+            #{card.inserttime},
+            #{card.operatetime}
+            )
+        </foreach >
+    </insert>
+
+    <update id="update" parameterType="com.platform.model.page.BusiReservationCardPage">
+        update b_reservationcard
+        <set>
+            <if test="cardcode != null">`cardCode` = #{cardcode}, </if>
+            <if test="password != null">`passWord` = #{password}, </if>
+            <if test="comcode != null">`comCode` = #{comcode}, </if>
+            <if test="username != null">`userName` = #{username}, </if>
+            <if test="sex != null">`sex` = #{sex}, </if>
+            <if test="identitycard != null">`identityCard` = #{identitycard}, </if>
+            <if test="phobenumber != null">`phobeNumber` = #{phobenumber}, </if>
+            <if test="medicalcode != null">`medicalCode` = #{medicalcode}, </if>
+            <if test="medicaldate != null">`medicalDate` = #{medicaldate}, </if>
+            <if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
+            <if test="sendaddress != null">`sendAddress` = #{sendaddress}, </if>
+            <if test="inserttime != null">`insertTime` = #{inserttime}, </if>
+            <if test="operatetime != null">`operateTime` = #{operatetime}</if>
+        </set>
+        where cardcode = #{cardcode}
+    </update>
+
+    <delete id="delete">
+		delete from b_reservationcard where id = #{value}
+	</delete>
+
+    <delete id="deleteBatch">
+        delete from b_reservationcard where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

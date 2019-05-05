@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.UUserDao">
+
+    <resultMap type="com.platform.entity.UUserEntity" id="uUserMap">
+        <result property="id" column="id"/>
+        <result property="usercode" column="usercode"/>
+        <result property="username" column="userName"/>
+        <result property="sex" column="sex"/>
+        <result property="comcode" column="comcode"/>
+        <result property="phobenumber" column="phobeNumber"/>
+        <result property="identitycard" column="identityCard"/>
+        <result property="address" column="address"/>
+        <result property="inserttime" column="insertTime"/>
+        <result property="operatetime" column="operateTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.platform.entity.UUserEntity">
+		select
+			`id`,
+			`usercode`,
+			`userName`,
+			`sex`,
+			`comcode`,
+			`phobeNumber`,
+			`identityCard`,
+			`address`,
+			`insertTime`,
+			`operateTime`
+		from u_user
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.platform.entity.UUserEntity">
+		select
+    		`id`,
+    		`usercode`,
+    		`userName`,
+    		`sex`,
+    		`comcode`,
+    		`phobeNumber`,
+    		`identityCard`,
+    		`address`,
+    		`insertTime`,
+    		`operateTime`
+		from u_user
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND name LIKE concat('%',#{name},'%')
+		</if>
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from u_user
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.platform.entity.UUserEntity">
+		insert into u_user(
+			`id`,
+			`usercode`,
+			`userName`,
+			`sex`,
+			`comcode`,
+			`phobeNumber`,
+			`identityCard`,
+			`address`,
+			`insertTime`,
+			`operateTime`)
+		values(
+			#{id},
+			#{usercode},
+			#{username},
+			#{sex},
+			#{comcode},
+			#{phobenumber},
+			#{identitycard},
+			#{address},
+			#{inserttime},
+			#{operatetime})
+	</insert>
+	 
+	<update id="update" parameterType="com.platform.entity.UUserEntity">
+		update u_user 
+		<set>
+			<if test="usercode != null">`usercode` = #{usercode}, </if>
+			<if test="username != null">`userName` = #{username}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="comcode != null">`comcode` = #{comcode}, </if>
+			<if test="phobenumber != null">`phobeNumber` = #{phobenumber}, </if>
+			<if test="identitycard != null">`identityCard` = #{identitycard}, </if>
+			<if test="address != null">`address` = #{address}, </if>
+			<if test="inserttime != null">`insertTime` = #{inserttime}, </if>
+			<if test="operatetime != null">`operateTime` = #{operatetime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from u_user where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from u_user where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
