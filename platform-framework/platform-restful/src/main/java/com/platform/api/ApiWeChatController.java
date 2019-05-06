@@ -2,6 +2,7 @@ package com.platform.api;
 
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
+import com.platform.entity.UMedicalecenterEntity;
 import com.platform.entity.vo.CardInfoVo;
 import com.platform.entity.WXLoginVO;
 import com.platform.entity.vo.MedicalCenterVO;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Api(value = "ApiLoginController|微信登陆")
@@ -108,7 +110,7 @@ public class ApiWeChatController {
     @PostMapping("/selectOrgan")
     public R selectOrgan(@RequestBody MedicalCenterVO medicalCenterVO) {
         HashMap<String, Object> returnMap = new HashMap<>();
-        log.info("选择体检机构信息入参:"+medicalCenterVO);
+        log.info("选择体检机构信息入参:"+JSONObject.toJSONString(medicalCenterVO));
         try {
             List<MedicalCenterVO>  medicalCenterVOs= apiUMedicalecenterService.queryCenterInfoByVo(medicalCenterVO);
             returnMap.put("medicalCenterVOs",medicalCenterVOs);
@@ -117,5 +119,52 @@ public class ApiWeChatController {
             log.error("选择体检机构信息异常"+ ExceptionUtil.getStackTrace(e));
         }
         return R.ok(returnMap);
+    }
+
+    @ApiOperation(value = "初始化选择体检日期页面", notes = "初始化选择体检日期页面")
+    @IgnoreAuth
+    @PostMapping("/selectOrganDate")
+    public R selectOrganDate(@RequestBody CardInfoVo cardInfoVo) {
+        HashMap<String, Object> returnMap = new HashMap<>();
+        BusiReservationCardPage card = new BusiReservationCardPage();
+        CardInfoVo cardInfoResult = new CardInfoVo();
+        log.info("初始化选择体检日期页面入参:"+JSONObject.toJSONString(cardInfoVo));
+        try {
+            card.setCardcode(cardInfoVo.getCardcode());
+            List<BusiReservationCardPage> busiReservationCardPages = apiCardService.queryObjectByPage(card);
+            if(busiReservationCardPages != null && busiReservationCardPages.size()>0){
+                BeanUtils.copyProperties(cardInfoResult,busiReservationCardPages.get(0));
+                cardInfoResult.setMedicalcode(cardInfoVo.getMedicalcode());
+            }
+            UMedicalecenterEntity centerEntity = apiUMedicalecenterService.queryObject(cardInfoVo.getMedicalcode());
+            MedicalCenterVO medicalCenterVO = new MedicalCenterVO();
+            BeanUtils.copyProperties(medicalCenterVO,centerEntity);
+            cardInfoVo.setMedicalcode(centerEntity.getMedicalecentercode());
+            returnMap.put("cardInfoVo",cardInfoResult);
+            returnMap.put("medicalCenterVO",medicalCenterVO);
+            log.info("初始化体检日期页面查询结果"+JSONObject.toJSONString(returnMap));
+        }catch (Exception e){
+            log.error("初始化体检日期页面报错"+ ExceptionUtil.getStackTrace(e));
+        }
+        return R.ok(returnMap);
+    }
+
+
+    @ApiOperation(value = "体检信息确认页面", notes = "体检信息确认页面")
+    @IgnoreAuth
+    @PostMapping("/reservationSubmit")
+    public R reservationSubmit(@RequestBody CardInfoVo cardInfoVo) {
+        BusiReservationCardPage cardPage = new BusiReservationCardPage();
+        log.info("体检信息确认页面入参:"+JSONObject.toJSONString(cardInfoVo));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            cardPage.setMedicaldate(sdf.parse(cardInfoVo.getMedicaldateStr()));
+            BeanUtils.copyProperties(cardPage,cardInfoVo);
+            cardPage.setOperatetime(new Date());
+            apiCardService.update(cardPage);
+        }catch (Exception e){
+            log.error("体检信息确认页面报错"+ ExceptionUtil.getStackTrace(e));
+        }
+        return R.ok();
     }
 }

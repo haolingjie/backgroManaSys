@@ -1,6 +1,7 @@
 package com.platform.entity.vo;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class CardInfoVo implements Serializable {
 
@@ -34,9 +35,14 @@ public class CardInfoVo implements Serializable {
      */
     private String phobenumber;
     /**
-     * 体检中心地址
+     * 体检中心id
      */
     private String medicalcode;
+    /**
+     * 体检日期
+     */
+    private String medicaldateStr;
+
 
     public String getCardcode() {
         return cardcode;
@@ -100,5 +106,13 @@ public class CardInfoVo implements Serializable {
 
     public void setMedicalcode(String medicalcode) {
         this.medicalcode = medicalcode;
+    }
+
+    public String getMedicaldateStr() {
+        return medicaldateStr;
+    }
+
+    public void setMedicaldateStr(String medicaldateStr) {
+        this.medicaldateStr = medicaldateStr;
     }
 }
