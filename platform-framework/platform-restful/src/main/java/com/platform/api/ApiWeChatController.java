@@ -10,6 +10,7 @@ import com.platform.model.page.BusiReservationCardPage;
 import com.platform.service.ApiCardService;
 import com.platform.service.ApiUMedicalecenterService;
 import com.platform.util.wechat.medicalAppointment.LoginUtil;
+import com.platform.util.wechat.medicalAppointment.MedicalAppUtil;
 import com.platform.utils.ExceptionUtil;
 import com.platform.utils.R;
 import io.swagger.annotations.Api;
@@ -161,10 +162,42 @@ public class ApiWeChatController {
             cardPage.setMedicaldate(sdf.parse(cardInfoVo.getMedicaldateStr()));
             BeanUtils.copyProperties(cardPage,cardInfoVo);
             cardPage.setOperatetime(new Date());
+            //2已预购
+            cardPage.setCardstatus(MedicalAppUtil.CARDSTATUS_2);
             apiCardService.update(cardPage);
         }catch (Exception e){
             log.error("体检信息确认页面报错"+ ExceptionUtil.getStackTrace(e));
         }
         return R.ok();
     }
+
+    @ApiOperation(value = "初始化预约信息查看页面", notes = "初始化预约信息查看页面")
+    @IgnoreAuth
+    @PostMapping("/browsingCardInfo")
+    public R browsingCardInfo(@RequestBody CardInfoVo cardInfoVo) {
+        HashMap<String, Object> returnMap = new HashMap<>();
+        BusiReservationCardPage card = new BusiReservationCardPage();
+        CardInfoVo cardInfoResult = new CardInfoVo();
+        log.info("初始化预约信息查看页面入参:"+JSONObject.toJSONString(cardInfoVo));
+        try {
+            card.setCardcode(cardInfoVo.getCardcode());
+            List<BusiReservationCardPage> busiReservationCardPages = apiCardService.queryObjectByPage(card);
+            if(busiReservationCardPages != null && busiReservationCardPages.size()>0){
+                BeanUtils.copyProperties(cardInfoResult,busiReservationCardPages.get(0));
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                cardInfoResult.setMedicaldateStr(sdf.format(busiReservationCardPages.get(0).getMedicaldate()));
+            }
+            UMedicalecenterEntity centerEntity = apiUMedicalecenterService.queryObject(cardInfoVo.getMedicalcode());
+            cardInfoResult.setMedicalcode(centerEntity.getId());
+            MedicalCenterVO medicalCenterVO = new MedicalCenterVO();
+            BeanUtils.copyProperties(medicalCenterVO,centerEntity);
+            returnMap.put("cardInfoVo",cardInfoResult);
+            returnMap.put("medicalCenterVO",medicalCenterVO);
+            log.info("初始化预约信息查看页面"+JSONObject.toJSONString(returnMap));
+        }catch (Exception e){
+            log.error("初始化预约信息查看页面"+ ExceptionUtil.getStackTrace(e));
+        }
+        return R.ok(returnMap);
+    }
+
 }

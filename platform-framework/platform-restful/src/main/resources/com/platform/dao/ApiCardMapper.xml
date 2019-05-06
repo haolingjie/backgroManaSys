@@ -17,6 +17,8 @@
         <result property="medicaldate" column="medicalDate"/>
         <result property="cardstatus" column="cardStatus"/>
         <result property="sendaddress" column="sendAddress"/>
+        <result property="startDate" column="startDate"/>
+        <result property="endDate" column="endDate"/>
         <result property="inserttime" column="insertTime"/>
         <result property="operatetime" column="operateTime"/>
     </resultMap>

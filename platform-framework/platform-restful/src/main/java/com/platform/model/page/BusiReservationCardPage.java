@@ -61,6 +61,16 @@ public class BusiReservationCardPage implements Serializable {
      * 寄送地址
      */
     private String sendaddress;
+
+    /**
+     * 有效期起始日期
+     */
+    private String startDate;
+
+    /**
+     *有效期结束日期
+     */
+    private String endDate;
     /**
      * 插入时间
      */
@@ -239,6 +249,23 @@ public class BusiReservationCardPage implements Serializable {
     public String getSendaddress() {
         return sendaddress;
     }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     /**
      * 设置：插入时间
      */
