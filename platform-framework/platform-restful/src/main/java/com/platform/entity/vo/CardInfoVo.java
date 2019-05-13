@@ -2,10 +2,9 @@ package com.platform.entity.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 public class CardInfoVo implements Serializable {
-
-
     /**
      * 卡号
      */
@@ -14,6 +13,11 @@ public class CardInfoVo implements Serializable {
      * 密码
      */
     private String username;
+
+    /**
+     * 微信openId
+     */
+    private String openId;
     /**
      * 身份证号
      */
@@ -42,6 +46,8 @@ public class CardInfoVo implements Serializable {
      * 体检日期
      */
     private String medicaldateStr;
+
+    private List<FormId> formIdList;
 
 
     public String getCardcode() {
@@ -114,5 +120,21 @@ public class CardInfoVo implements Serializable {
 
     public void setMedicaldateStr(String medicaldateStr) {
         this.medicaldateStr = medicaldateStr;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public List<FormId> getFormIdList() {
+        return formIdList;
+    }
+
+    public void setFormIdList(List<FormId> formIdList) {
+        this.formIdList = formIdList;
     }
 }

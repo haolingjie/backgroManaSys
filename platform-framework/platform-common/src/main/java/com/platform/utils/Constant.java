@@ -35,6 +35,7 @@ public class Constant {
      * 权限前缀
      */
     public static final String PERMS_LIST = "permsList";
+    public static final String FORMIDCACHE = "formIdCache";
 
     /**
      * 菜单类型

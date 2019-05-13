@@ -28,6 +28,10 @@ public class BReservationcardEntity implements Serializable {
      */
     private String password;
     /**
+     * 微信openId
+     */
+    private String openId;
+    /**
      * 公司代码
      */
     private String comcode;
@@ -129,6 +133,16 @@ public class BReservationcardEntity implements Serializable {
     public String getPassword() {
         return password;
     }
+
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
     /**
      * 设置：公司代码
      */

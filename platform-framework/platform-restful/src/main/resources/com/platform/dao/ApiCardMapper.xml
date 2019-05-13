@@ -7,6 +7,7 @@
         <result property="id" column="id"/>
         <result property="cardcode" column="cardCode"/>
         <result property="password" column="passWord"/>
+        <result property="openId" column="openId"/>
         <result property="comcode" column="comCode"/>
         <result property="username" column="userName"/>
         <result property="sex" column="sex"/>
@@ -41,6 +42,7 @@
 			`id`,
 			`cardCode`,
 			`passWord`,
+			`openId`,
 			`comCode`,
 			`userName`,
 			`sex`,
@@ -61,6 +63,7 @@
         `id`,
         `cardCode`,
         `passWord`,
+        `openId`,
         `comCode`,
         `userName`,
         `sex`,
@@ -175,6 +178,7 @@
             <if test="password != null">`passWord` = #{password}, </if>
             <if test="comcode != null">`comCode` = #{comcode}, </if>
             <if test="username != null">`userName` = #{username}, </if>
+            <if test="openId != null">`openId` = #{openId}, </if>
             <if test="sex != null">`sex` = #{sex}, </if>
             <if test="identitycard != null">`identityCard` = #{identitycard}, </if>
             <if test="phobenumber != null">`phobeNumber` = #{phobenumber}, </if>

@@ -52,4 +52,14 @@
            maxEntriesLocalDisk="10000000"
            overflowToDisk="false"
            memoryStoreEvictionPolicy="LRU"/>
+
+
+    <cache name="formIdCache"
+           maxElementsInMemory="50000"
+           eternal="false"
+           timeToIdleSeconds="604800"
+           timeToLiveSeconds="604800"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
 </ehcache>
