@@ -9,7 +9,7 @@
     <description>platform</description>
 
     <modules>
-        <module>platform-framework</module>
+<!--        <module>platform-framework</module>-->
         <module>platform-gen</module>
         <module>platform-schedule</module>
         <module>platform-common</module>

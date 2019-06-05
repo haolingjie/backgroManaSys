@@ -8,6 +8,7 @@ import com.platform.entity.UMedicalecenterEntity;
 import com.platform.entity.vo.CardInfoVo;
 import com.platform.entity.WXLoginVO;
 import com.platform.entity.vo.MedicalCenterVO;
+import com.platform.entity.vo.WeiXinDate;
 import com.platform.model.page.BusiReservationCardPage;
 import com.platform.service.ApiCardService;
 import com.platform.service.ApiUMedicalecenterService;
@@ -26,6 +27,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.util.IntegerField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,13 +152,49 @@ public class ApiWeChatController {
             MedicalCenterVO medicalCenterVO = new MedicalCenterVO();
             BeanUtils.copyProperties(medicalCenterVO, centerEntity);
             cardInfoVo.setMedicalcode(centerEntity.getMedicalecentercode());
+            List<Integer> curCanDateList = new ArrayList<>();
+            List<WeiXinDate> allOrageDates = new ArrayList<WeiXinDate>();
             String currDate = DateUtils.getCurrDate();
+            Calendar calendar = Calendar.getInstance();
+            int month = calendar.get(Calendar.MONTH);
+            //日历，日期选择器
+            for(int i=0;i<55;i++) {
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                int year = calendar.get(Calendar.YEAR);
+                int weekday = calendar.get(Calendar.DAY_OF_WEEK);
+                int forMonth = calendar.get(Calendar.MONTH);
+                if(month == forMonth){
+                    if(weekday == 1){
+//                        curRemoveDateList.add(day);
+                    }else{
+                        curCanDateList.add(day);
+                        WeiXinDate weiXinDate = new WeiXinDate(year, forMonth+1, day);
+                        allOrageDates.add(weiXinDate);
+                    }
+                }else{
+                    if(weekday == 1){
+//                        nextRemoveDateList.add(day);
+                    }else{
+                        WeiXinDate weiXinDate = new WeiXinDate(year, forMonth+1, day);
+                        allOrageDates.add(weiXinDate);
+                    }
+                }
+                calendar.add(Calendar.DATE, 1);
+            }
             String startDate = DateUtils.getNextDay(currDate, 1);
+            //排除日期,后期从数据库查出来
+            String removeDate = DateUtils.getNextDay(currDate, 5);
+//            removeDateList.add(removeDate);
             String endDate = DateUtils.getNextDay(currDate,14);
             returnMap.put("cardInfoVo", cardInfoResult);
             returnMap.put("medicalCenterVO", medicalCenterVO);
+
             returnMap.put("startDate", startDate);
             returnMap.put("endDate", endDate);
+            returnMap.put("curCanDateList", curCanDateList);
+//            returnMap.put("curRemoveDateList", curRemoveDateList);
+            returnMap.put("allOrageDates", allOrageDates);
+//            returnMap.put("nextRemoveDateList", nextRemoveDateList);
 
             log.info("初始化体检日期页面查询结果" + JSONObject.toJSONString(returnMap));
         } catch (Exception e) {
