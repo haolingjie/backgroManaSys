@@ -166,10 +166,31 @@
 			<if test="medicaldate != null">`medicalDate` = #{medicaldate}, </if>
 			<if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
 			<if test="sendaddress != null">`sendAddress` = #{sendaddress}, </if>
-			<if test="inserttime != null">`insertTime` = #{inserttime}, </if>
-			<if test="operatetime != null">`operateTime` = #{operatetime}</if>
+			<if test="endDate != null">`endDate` = #{endDate}, </if>
+			<if test="startDate != null">`startDate` = #{startDate}, </if>
+			`operateTime` = now()
 		</set>
 		where id = #{id}
+	</update>
+
+	<update id="updateByCardCode"  parameterType="com.platform.entity.BReservationcardEntity">
+		update b_reservationcard
+		<set>
+			<if test="password != null">`passWord` = #{password}, </if>
+			<if test="comcode != null">`comCode` = #{comcode}, </if>
+			<if test="username != null">`userName` = #{username}, </if>
+			<if test="sex != null">`sex` = #{sex}, </if>
+			<if test="identitycard != null">`identityCard` = #{identitycard}, </if>
+			<if test="phobenumber != null">`phobeNumber` = #{phobenumber}, </if>
+			<if test="medicalcode != null">`medicalCode` = #{medicalcode}, </if>
+			<if test="medicaldate != null">`medicalDate` = #{medicaldate}, </if>
+			<if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
+			<if test="sendaddress != null">`sendAddress` = #{sendaddress}, </if>
+			<if test="endDate != null">`endDate` = #{endDate}, </if>
+			<if test="startDate != null">`startDate` = #{startDate}, </if>
+			`operateTime` = now()
+		</set>
+		where cardcode = #{cardcode}
 	</update>
 	
 	<delete id="delete">

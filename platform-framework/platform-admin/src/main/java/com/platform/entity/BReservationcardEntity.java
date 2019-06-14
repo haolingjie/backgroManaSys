@@ -63,6 +63,11 @@ public class BReservationcardEntity implements Serializable {
      * 寄送地址
      */
     private String sendaddress;
+
+    private Date endDate;
+
+    private Date startDate;
+
     /**
      * 插入时间
      */
@@ -260,5 +265,21 @@ public class BReservationcardEntity implements Serializable {
     public Date getOperatetime() {
         operatetime=new Date();
         return operatetime;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
     }
 }

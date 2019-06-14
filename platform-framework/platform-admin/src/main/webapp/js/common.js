@@ -98,6 +98,14 @@ function getSelectedRows(gridId) {
     return grid.getGridParam("selarrrow");
 };
 
+//选择多条记录
+function getAllSelectedRows(gridId) {
+    var grid = $(gridId);
+    // var rowKey = grid.getGridParam("selrow");
+
+    return grid.getGridParam("selarrrow");
+};
+
 /**
  * 预览图片
  * @param url

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.cache.J2CacheUtils;
+import com.platform.entity.MCardmessageEntity;
 import com.platform.entity.UMedicalecenterEntity;
 import com.platform.entity.vo.CardInfoVo;
 import com.platform.entity.WXLoginVO;
@@ -11,6 +12,7 @@ import com.platform.entity.vo.MedicalCenterVO;
 import com.platform.entity.vo.WeiXinDate;
 import com.platform.model.page.BusiReservationCardPage;
 import com.platform.service.ApiCardService;
+import com.platform.service.ApiMCardmessageService;
 import com.platform.service.ApiUMedicalecenterService;
 import com.platform.util.DateUtils;
 import com.platform.util.HttpClientUtil;
@@ -46,6 +48,9 @@ public class ApiWeChatController {
 
     @Autowired
     private ApiUMedicalecenterService apiUMedicalecenterService;
+
+    @Autowired
+    private ApiMCardmessageService apiMCardmessageService;
     private static Logger log = LoggerFactory.getLogger(ApiWeChatController.class);
 
     @ApiOperation(value = "微信登陆", notes = "微信登陆")
@@ -315,5 +320,31 @@ public class ApiWeChatController {
             e.printStackTrace();
         }
         return R.ok(resultMap);
+    }
+
+    @PostMapping("/activateCard")
+    @IgnoreAuth
+    public R activateCard(@RequestBody BusiReservationCardPage page) {
+        String msg="";
+        if(StringUtils.equals(page.getCardstatus(),"0")){
+            msg="该卡片未激活，已联系售卡方激活，请留意微信公众号消息提示";
+        }else if(StringUtils.equals(page.getCardstatus(),"4")){
+            msg="该卡片已过期，已联系售卡方延长使用日期，请留意微信公众号消息提示";
+        }
+        Map<String, Object> messageMap = new HashMap<>();
+        messageMap.put("cardcode",page.getCardcode());
+        messageMap.put("cardstatus",page.getCardstatus());
+        List<MCardmessageEntity> mCardmessageEntities = apiMCardmessageService.queryList(messageMap);
+        if(mCardmessageEntities != null && mCardmessageEntities.size()>0){
+            return R.ok(msg);
+        }
+        MCardmessageEntity mCardmessageEntity = new MCardmessageEntity();
+        mCardmessageEntity.setCardcode(page.getCardcode());
+        mCardmessageEntity.setCardstatus(page.getCardstatus());
+        mCardmessageEntity.setStatus("1");
+        mCardmessageEntity.setInserttime(new Date());
+        mCardmessageEntity.setOperatetime(new Date());
+        apiMCardmessageService.save(mCardmessageEntity);
+        return R.ok(msg);
     }
 }

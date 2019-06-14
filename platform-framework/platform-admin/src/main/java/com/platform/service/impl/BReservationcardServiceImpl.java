@@ -63,4 +63,9 @@ public class BReservationcardServiceImpl implements BReservationcardService {
     public void saveList(List<BReservationcardEntity> cardList) {
         bReservationcardDao.saveList(cardList);
     }
+
+    @Override
+    public void updateByCardCode(BReservationcardEntity entity) {
+         bReservationcardDao.updateByCardCode(entity);
+    }
 }

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.platform.dao.ApiMCardmessageDao">
+
+    <resultMap type="com.platform.entity.MCardmessageEntity" id="mCardmessageMap">
+        <result property="id" column="id"/>
+        <result property="cardcode" column="cardCode"/>
+        <result property="cardstatus" column="cardStatus"/>
+        <result property="status" column="status"/>
+        <result property="inserttime" column="insertTime"/>
+        <result property="operatetime" column="operateTime"/>
+    </resultMap>
+
+	<select id="queryObject" resultType="com.platform.entity.MCardmessageEntity">
+		select
+			`id`,
+			`cardCode`,
+			`cardStatus`,
+			`status`,
+			`insertTime`,
+			`operateTime`
+		from m_cardmessage
+		where id = #{id}
+	</select>
+
+	<select id="queryList" resultType="com.platform.entity.MCardmessageEntity">
+		select
+    		`id`,
+    		`cardCode`,
+    		`cardStatus`,
+    		`status`,
+    		`insertTime`,
+    		`operateTime`
+		from m_cardmessage
+		WHERE 1=1
+		<if test="cardcode != null and cardstatus.trim() != ''">
+			AND cardcode LIKE concat('%',#{cardcode},'%')
+		</if>
+		<if test="cardstatus != null and cardstatus.trim() != ''">
+			AND cardstatus =#{cardstatus}
+		</if>
+		AND status ='1'
+        <choose>
+            <when test="sidx != null and sidx.trim() != ''">
+                order by ${sidx} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="queryTotal" resultType="int">
+		select count(*) from m_cardmessage
+		WHERE 1=1
+        <if test="name != null and name.trim() != ''">
+            AND name LIKE concat('%',#{name},'%')
+        </if>
+	</select>
+	 
+	<insert id="save" parameterType="com.platform.entity.MCardmessageEntity">
+		insert into m_cardmessage(
+			`id`,
+			`cardCode`,
+			`cardStatus`,
+			`status`,
+			`insertTime`,
+			`operateTime`)
+		values(
+			#{id},
+			#{cardcode},
+			#{cardstatus},
+			#{status},
+			#{inserttime},
+			#{operatetime})
+	</insert>
+	 
+	<update id="update" parameterType="com.platform.entity.MCardmessageEntity">
+		update m_cardmessage 
+		<set>
+			<if test="cardcode != null">`cardCode` = #{cardcode}, </if>
+			<if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
+			<if test="status != null">`status` = #{status}, </if>
+			<if test="inserttime != null">`insertTime` = #{inserttime}, </if>
+			<if test="operatetime != null">`operateTime` = #{operatetime}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="delete">
+		delete from m_cardmessage where id = #{value}
+	</delete>
+	
+	<delete id="deleteBatch">
+		delete from m_cardmessage where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
