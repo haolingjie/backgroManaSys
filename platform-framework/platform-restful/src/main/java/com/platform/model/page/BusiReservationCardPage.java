@@ -69,12 +69,12 @@ public class BusiReservationCardPage implements Serializable {
     /**
      * 有效期起始日期
      */
-    private String startDate;
+    private Date startDate;
 
     /**
      *有效期结束日期
      */
-    private String endDate;
+    private Date endDate;
 
 
     private String modifyFlag;
@@ -267,19 +267,19 @@ public class BusiReservationCardPage implements Serializable {
         return sendaddress;
     }
 
-    public String getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
     }
 

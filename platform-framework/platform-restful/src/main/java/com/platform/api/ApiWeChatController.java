@@ -78,7 +78,7 @@ public class ApiWeChatController {
                 }
                 return R.error("密码不正确");
             } else {
-                return R.ok("账号不存在");
+                return R.error("账号不存在");
             }
         } else {
             String identityCard = loginVO.getIdentityCard();
@@ -364,7 +364,7 @@ public class ApiWeChatController {
     @PostMapping("/getTongCardStlyle")
     @IgnoreAuth
     public R activateCard(@RequestBody CardInfoVo cardInfoVo) {
-        String tongCardStlyle="";
+        List<String> tongCardStlyleList=new ArrayList<>();
         String cardcode = cardInfoVo.getCardcode();
         if(StringUtils.isNotBlank(cardcode)){
             char option = cardcode.charAt(0);
@@ -380,7 +380,11 @@ public class ApiWeChatController {
                 if(uDictOptionEntities != null && uDictOptionEntities.size()>0){
                     for (UDictOptionEntity entity:uDictOptionEntities) {
                         if(StringUtils.equals("tongCard",entity.getOptioncode())){
-                            tongCardStlyle=entity.getOptionimport();
+                            String tongCardStlyle=entity.getOptionimport();
+                            if(StringUtils.isNotBlank(tongCardStlyle)){
+                                String[] tongCardStlyleArr = tongCardStlyle.split(",");
+                                tongCardStlyleList = Arrays.asList(tongCardStlyleArr);
+                            }
                         }
 
                     }
@@ -388,6 +392,6 @@ public class ApiWeChatController {
 
             }
         }
-        return R.ok().put("tongCardStlyle",tongCardStlyle);
+        return R.ok().put("tongCardStlyleList",tongCardStlyleList);
     }
 }

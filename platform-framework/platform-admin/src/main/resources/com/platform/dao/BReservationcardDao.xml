@@ -37,6 +37,7 @@
 			`medicalDate`,
 			`cardStatus`,
 			`sendAddress`,
+			`modifyFlag`,
 			`endDate`,
 			`startDate`,
 			`insertTime`,
