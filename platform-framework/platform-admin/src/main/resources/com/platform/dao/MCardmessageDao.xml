@@ -34,8 +34,11 @@
     		`operateTime`
 		from m_cardmessage
 		WHERE 1=1
-		<if test="cardCode != null and cardCode.trim() != ''">
-			AND cardCode LIKE concat('%',#{cardCode},'%')
+		<if test="name != null and name.trim() != ''">
+			AND cardCode LIKE concat('%',#{name},'%')
+		</if>
+		<if test="cardstatus != null and cardstatus.trim() != ''">
+			AND cardstatus=#{cardstatus}
 		</if>
 		and status='1'
         <choose>
@@ -54,8 +57,11 @@
  	<select id="queryTotal" resultType="int">
 		select count(*) from m_cardmessage
 		WHERE 1=1
-		<if test="cardCode != null and cardCode.trim() != ''">
-			AND cardCode LIKE concat('%',#{cardCode},'%')
+		<if test="name != null and name.trim() != ''">
+			AND cardCode LIKE concat('%',#{name},'%')
+		</if>
+		<if test="cardstatus != null and cardstatus.trim() != ''">
+			AND cardstatus=#{cardstatus}
 		</if>
 		and status='1'
 	</select>

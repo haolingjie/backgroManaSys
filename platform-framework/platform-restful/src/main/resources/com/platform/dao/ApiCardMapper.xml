@@ -18,6 +18,7 @@
         <result property="medicaldate" column="medicalDate"/>
         <result property="cardstatus" column="cardStatus"/>
         <result property="sendaddress" column="sendAddress"/>
+        <result property="modifyFlag" column="modifyFlag"/>
         <result property="startDate" column="startDate"/>
         <result property="endDate" column="endDate"/>
         <result property="inserttime" column="insertTime"/>
@@ -52,6 +53,9 @@
 			`medicalDate`,
 			`cardStatus`,
 			`sendAddress`,
+			`modifyFlag`,
+			`endDate`,
+			`startDate`,
 			`insertTime`,
 			`operateTime`
 		from b_reservationcard
@@ -73,6 +77,9 @@
         `medicalDate`,
         `cardStatus`,
         `sendAddress`,
+        `modifyFlag`,
+        `endDate`,
+        `startDate`,
         `insertTime`,
         `operateTime`
         from b_reservationcard

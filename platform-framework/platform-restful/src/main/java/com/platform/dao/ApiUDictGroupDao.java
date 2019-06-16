@@ -8,6 +8,6 @@ import com.platform.entity.UDictGroupEntity;
  * @author lipengjun
  * @date 2019-04-26 18:24:29
  */
-public interface UDictGroupDao extends BaseDao<UDictGroupEntity> {
+public interface ApiUDictGroupDao extends BaseDao<UDictGroupEntity> {
 
 }

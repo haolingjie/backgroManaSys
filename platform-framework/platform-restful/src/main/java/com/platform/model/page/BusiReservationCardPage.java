@@ -75,6 +75,9 @@ public class BusiReservationCardPage implements Serializable {
      *有效期结束日期
      */
     private String endDate;
+
+
+    private String modifyFlag;
     /**
      * 插入时间
      */
@@ -278,6 +281,14 @@ public class BusiReservationCardPage implements Serializable {
 
     public void setEndDate(String endDate) {
         this.endDate = endDate;
+    }
+
+    public String getModifyFlag() {
+        return modifyFlag;
+    }
+
+    public void setModifyFlag(String modifyFlag) {
+        this.modifyFlag = modifyFlag;
     }
 
     /**

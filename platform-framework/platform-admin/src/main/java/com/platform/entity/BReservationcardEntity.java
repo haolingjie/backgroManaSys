@@ -63,6 +63,7 @@ public class BReservationcardEntity implements Serializable {
      * 寄送地址
      */
     private String sendaddress;
+    private String modifyFlag;
 
     private Date endDate;
 
@@ -236,6 +237,15 @@ public class BReservationcardEntity implements Serializable {
     public String getSendaddress() {
         return sendaddress;
     }
+
+    public String getModifyFlag() {
+        return modifyFlag;
+    }
+
+    public void setModifyFlag(String modifyFlag) {
+        this.modifyFlag = modifyFlag;
+    }
+
     /**
      * 设置：插入时间
      */

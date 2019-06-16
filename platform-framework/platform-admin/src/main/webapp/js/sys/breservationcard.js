@@ -7,15 +7,56 @@ $(function () {
 			{label: '密码', name: 'password', index: 'passWord', width: 80},
 			{label: '公司代码', name: 'comcode', index: 'comCode', width: 80},
 			{label: '用户名称', name: 'username', index: 'userName', width: 80},
-			{label: '性别', name: 'sex', index: 'sex', width: 80},
+			{label: '性别', name: 'sex', index: 'sex', width: 80,formatter: function (value) {
+				if(value =="1"){
+					return '男'
+				}else if(value == '0'){
+					return '女';
+				}else{
+					return value;
+				}
+			}},
 			{label: '身份证号', name: 'identitycard', index: 'identityCard', width: 80},
 			{label: '手机号', name: 'phobenumber', index: 'phobeNumber', width: 80},
 			{label: '体检机构', name: 'medicalcode', index: 'medicalCode', width: 80},
 			{label: '体检日期', name: 'medicaldate', index: 'medicalDate', width: 80},
-			{label: '医疗卡状态 0：未激活，1：已激活，2已预购，3已到检，4：已过期', name: 'cardstatus', index: 'cardStatus', width: 80},
+			{label: '医疗卡状态', name: 'cardstatus', index: 'cardStatus', width: 80,formatter: function (value) {
+					if(value =="0"){
+						return '未激活'
+					}else if(value == '1'){
+						return '已激活';
+					}else if(value == '2'){
+						return '已预购';
+					}else if(value == '3'){
+						return '已到检';
+					}else if(value == '4'){
+						return '已过期';
+					}else{
+						return value;
+					}
+			}},
 			{label: '寄送地址', name: 'sendaddress', index: 'sendAddress', width: 80},
-			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80},
-			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80}]
+			{label: '信息编辑标识', name: 'modifyFlag', index: 'modifyFlag', width: 80, formatter: function (value) {
+					if(value =="0"){
+						return '均可编辑'
+					}else if(value == '1'){
+						return '用户信息可修改，寄送地址不可修改';
+					}else if(value == '2'){
+						return '用户信息不可修改，寄送地址可修改';
+					}else if(value == '3'){
+						return '均不可修改';
+					}else{
+						return value;
+					}
+			}},
+			{label: '有效日期起始日期', name: 'startDate', index: 'startDate', width: 80, formatter: function (value) {
+					return transDate(value);}},
+			{label: '有效日期结束日期', name: 'endDate', index: 'endDate', width: 80, formatter: function (value) {
+					return transDate(value);}},
+			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80, formatter: function (value) {
+					return transDate(value);}},
+			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80, formatter: function (value) {
+					return transDate(value);}},],
     });
 });
 
@@ -31,7 +72,9 @@ let vm = new Vue({
 			]
 		},
 		q: {
-		    name: ''
+		    name: '',
+			cardstatus: '',
+
 		}
 	},
 	methods: {
@@ -100,7 +143,7 @@ let vm = new Vue({
 			vm.showList = true;
             let page = $("#jqGrid").jqGrid('getGridParam', 'page');
 			$("#jqGrid").jqGrid('setGridParam', {
-                postData: {'name': vm.q.name},
+                postData: {'name': vm.q.name,'cardstatus':vm.q.cardstatus},
                 page: page
             }).trigger("reloadGrid");
             vm.handleReset('formValidate');

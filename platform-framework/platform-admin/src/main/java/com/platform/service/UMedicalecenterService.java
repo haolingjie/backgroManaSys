@@ -2,6 +2,7 @@ package com.platform.service;
 
 import com.platform.entity.UMedicalecenterEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -68,4 +69,8 @@ public interface UMedicalecenterService {
      * @return 删除条数
      */
     int deleteBatch(String[] ids);
+
+    void saveList(ArrayList<UMedicalecenterEntity> centerEntities);
+
+    List<UMedicalecenterEntity> queryListNotPage(Map<String, Object> paramMap);
 }

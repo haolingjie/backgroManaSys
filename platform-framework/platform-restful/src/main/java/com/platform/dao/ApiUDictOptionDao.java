@@ -8,6 +8,6 @@ import com.platform.entity.UDictOptionEntity;
  * @author lipengjun
  * @date 2019-04-26 18:24:29
  */
-public interface UDictOptionDao extends BaseDao<UDictOptionEntity> {
+public interface ApiUDictOptionDao extends BaseDao<UDictOptionEntity> {
 
 }

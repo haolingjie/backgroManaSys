@@ -13,7 +13,7 @@
                     <i-input v-model="q.name" @on-enter="query" placeholder="名称"/>
                 </i-col>
                 <i-col span="4">
-                <i-select v-model="q.cardStatus">
+                <i-select v-model="q.cardStatus" placeholder="预约卡状态">
                     <i-option value="0">未激活</i-option>
                     <i-option value="4">已过期</i-option>
                 </i-select>
@@ -23,7 +23,7 @@
                 <i-button @click="reloadSearch">重置</i-button>
                 </i-col>
                 <i-col span="4">
-                    <i-select v-model="q.delayMonth">
+                    <i-select v-model="q.delayMonth" placeholder="延期时间选择">
                         <i-option value="1">1个月</i-option>
                         <i-option value="2">2个月</i-option>
                         <i-option value="3">3个月</i-option>
@@ -62,17 +62,20 @@
             <Form-item label="卡号" prop="cardcode">
                 <i-input v-model="mCardmessage.cardcode" placeholder="卡号"/>
             </Form-item>
-            <Form-item label="医疗卡状态 0：未激活，1：已激活，2已预购，3已到检，4：已过期" prop="cardstatus">
-                <i-input v-model="mCardmessage.cardstatus" placeholder="医疗卡状态 0：未激活，1：已激活，2已预购，3已到检，4：已过期"/>
+            <Form-item label="预约卡状态" prop="cardstatus">
+                <i-select v-model="mCardmessage.cardstatus">
+                    <i-option value="0">未激活</i-option>
+                    <i-option value="1">已激活</i-option>
+                    <i-option value="2">已预购</i-option>
+                    <i-option value="3">已到检</i-option>
+                    <i-option value="4">已过期</i-option>
+                </i-select>
             </Form-item>
-            <Form-item label="消息有效位：0无效，1有效" prop="status">
-                <i-input v-model="mCardmessage.status" placeholder="消息有效位：0无效，1有效"/>
-            </Form-item>
-            <Form-item label="插入时间" prop="inserttime">
-                <i-input v-model="mCardmessage.inserttime" placeholder="插入时间"/>
-            </Form-item>
-            <Form-item label="更新时间" prop="operatetime">
-                <i-input v-model="mCardmessage.operatetime" placeholder="更新时间"/>
+            <Form-item label="消息有效位" prop="status">
+                <i-select v-model="mCardmessage.status">
+                    <i-option value="0">无效</i-option>
+                    <i-option value="1">有效</i-option>
+                </i-select>
             </Form-item>
             <Form-item>
                 <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>

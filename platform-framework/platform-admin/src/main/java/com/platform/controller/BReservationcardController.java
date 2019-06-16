@@ -1,5 +1,7 @@
 package com.platform.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.google.gson.JsonObject;
 import com.platform.entity.BReservationcardEntity;
 import com.platform.entity.UDataRuleEntity;
 import com.platform.entity.UDictGroupEntity;
@@ -9,14 +11,18 @@ import com.platform.utils.PageUtils;
 import com.platform.utils.PassWordCreateUtil;
 import com.platform.utils.Query;
 import com.platform.utils.R;
+import com.platform.utils.excel.ExcelImport;
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * 预约卡信息表Controller
@@ -31,6 +37,9 @@ public class BReservationcardController {
     private BReservationcardService bReservationcardService;
     @Autowired
     private UDataRuleService utilDataRuleService;
+    private Logger log = LoggerFactory.getLogger(this.getClass());
+    private static ArrayList<BReservationcardEntity> bReservationcardEntities = new ArrayList<>();
+
     /**
      * 查看列表
      */
@@ -38,6 +47,7 @@ public class BReservationcardController {
     @RequiresPermissions("breservationcard:list")
     @ResponseBody
     public R list(@RequestParam Map<String, Object> params) {
+
         //查询列表数据
         Query query = new Query(params);
 
@@ -129,5 +139,90 @@ public class BReservationcardController {
             utilDataRuleService.update(uDataRuleEntity);
         }
         return R.ok("医疗卡信息添加成功");
+    }
+
+
+    @RequestMapping("/uploadlist")
+    @ResponseBody
+    public R uploadlist() {
+        ArrayList<BReservationcardEntity> cardEntities = new ArrayList<>();
+        cardEntities.addAll(bReservationcardEntities);
+        bReservationcardEntities.clear();
+        PageUtils pageUtil = new PageUtils(cardEntities, cardEntities.size(), cardEntities.size(), 1);
+        return R.ok().put("page", pageUtil);
+    }
+
+    @RequestMapping("/upload")
+    @ResponseBody
+    public R upload(@RequestParam("file") MultipartFile file) {
+        List<String[]> excelData = ExcelImport.getExcelData(file);
+//        ArrayList<BReservationcardEntity> bReservationcardEntities = new ArrayList<>();
+        bReservationcardEntities.clear();
+        if(excelData != null && excelData.size()>1){
+            excelData.remove(0);
+            for(String[] data :excelData){
+                if(data != null && data.length>0){
+                    BReservationcardEntity bReservationcardEntity = new BReservationcardEntity();
+                    if(data.length>0) {
+                        UDataRuleEntity entity = new UDataRuleEntity();
+                        entity.setRulecode("cardCode");
+                        entity.setRuleoption(StringUtils.isBlank(data[0]) ? "" : data[0].trim());
+                        List<UDataRuleEntity> uDataRuleEntities = utilDataRuleService.queryListByEntity(entity);
+                        if(uDataRuleEntities != null && uDataRuleEntities.size()>0){
+                            UDataRuleEntity uDataRuleEntity = uDataRuleEntities.get(0);
+                            Long datamax = uDataRuleEntity.getDatamax();
+                            datamax++;
+                            bReservationcardEntity.setCardcode(entity.getRuleoption()+datamax);
+//                            bReservationcardEntity.setPassword(PassWordCreateUtil.createPassWord(8));
+                            uDataRuleEntity.setDatamax(datamax);
+                            utilDataRuleService.update(uDataRuleEntity);
+                        }
+                    }
+                    if(data.length>1) {
+                        bReservationcardEntity.setUsername(StringUtils.isBlank(data[1]) ? "" : data[1].trim());
+                    }
+                    if(data.length>2) {
+                        bReservationcardEntity.setSex(StringUtils.isBlank(data[2]) ? "" : data[2].trim());
+                    }
+                    if(data.length>3) {
+                        bReservationcardEntity.setIdentitycard(StringUtils.isBlank(data[3]) ? "" : data[3].trim());
+                    }
+                    if(data.length>4) {
+                        bReservationcardEntity.setPhobenumber(StringUtils.isBlank(data[4]) ? "" : data[4].trim());
+                    }
+                    if(data.length>5) {
+                        bReservationcardEntity.setSendaddress(StringUtils.isBlank(data[5]) ? "" : data[5].trim());
+                    }
+                    bReservationcardEntities.add(bReservationcardEntity);
+                }
+            }
+        }
+//        bReservationcardService.saveList(bReservationcardEntities);
+//       PageUtils pageUtil = new PageUtils(bReservationcardEntities, bReservationcardEntities.size(), bReservationcardEntities.size(), 1);
+        return R.ok();
+    }
+
+    @RequestMapping("/saveCardInfo")
+    @ResponseBody
+    public R saveCardInfo(@RequestBody Map<String, Object> params) {
+        List<Map<String,Object>> cardInfo = (List)params.get("cardInfo");
+        String modifyFlag = params.get("modifyFlag").toString();
+        ArrayList<BReservationcardEntity> cardEntities = new ArrayList<>();
+        if(cardInfo != null && cardInfo.size()>0){
+            for (Map<String,Object> map:cardInfo) {
+                BReservationcardEntity entity = JSON.parseObject(JSON.toJSONString(map), BReservationcardEntity.class);
+                entity.setModifyFlag(modifyFlag);
+                String sex= StringUtils.equals(entity.getSex(), "男") ? "1" : (StringUtils.equals(entity.getSex(), "女") ? "0" : "");
+                entity.setSex(sex);
+                entity.setPassword(PassWordCreateUtil.createPassWord(8));
+                entity.setStartDate(new Date());
+                Calendar calendar = Calendar.getInstance();
+                calendar.add(Calendar.YEAR,1);
+                entity.setEndDate(calendar.getTime());
+                cardEntities.add(entity);
+            }
+        }
+        bReservationcardService.saveList(cardEntities);
+        return R.ok();
     }
 }

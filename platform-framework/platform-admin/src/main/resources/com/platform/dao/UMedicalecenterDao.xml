@@ -14,6 +14,7 @@
         <result property="medicalecentercode" column="medicalECenterCode"/>
         <result property="medicalecentername" column="medicalECenterName"/>
         <result property="medicalecenteraddress" column="medicalECenterAddress"/>
+        <result property="notopenDay" column="notopenDay"/>
         <result property="inserttime" column="insertTime"/>
         <result property="operatetime" column="operateTime"/>
     </resultMap>
@@ -30,41 +31,56 @@
 			`medicalECenterCode`,
 			`medicalECenterName`,
 			`medicalECenterAddress`,
+			`notopenDay`,
 			`insertTime`,
 			`operateTime`
 		from u_medicalecenter
 		where id = #{id}
 	</select>
 
-	<select id="queryList" resultType="com.platform.entity.UMedicalecenterEntity">
+	<select id="queryListNotPage" resultType="com.platform.entity.UMedicalecenterEntity">
 		select
     		`id`,
-    		`cityCode`,
-    		`cityName`,
-    		`areaCode`,
-    		`areaName`,
-    		`medicalBrandCode`,
-    		`medicalBrandName`,
-    		`medicalECenterCode`,
-    		`medicalECenterName`,
-    		`medicalECenterAddress`,
-    		`insertTime`,
-    		`operateTime`
+    		`citycode`,
+    		`cityname`,
+    		`areacode`,
+    		`areaname`,
+    		`medicalbrandcode`,
+    		`medicalbrandname`,
+    		`medicalecentercode`,
+    		`medicalecentername`,
+    		`medicalecenteraddress`,
+    		`notopenday`,
+    		`inserttime`,
+    		`operatetime`
 		from u_medicalecenter
 		WHERE 1=1
-		<if test="name != null and name.trim() != ''">
-			AND name LIKE concat('%',#{name},'%')
+		<if test="citycode != null and citycode.trim() != ''">
+			AND citycode = #{citycode}
 		</if>
-        <choose>
-            <when test="sidx != null and sidx.trim() != ''">
-                order by ${sidx} ${order}
-            </when>
-			<otherwise>
-                order by id desc
-			</otherwise>
-        </choose>
-		<if test="offset != null and limit != null">
-			limit #{offset}, #{limit}
+		<if test="cityname != null and cityname.trim() != ''">
+			AND cityname = #{cityname}
+		</if>
+		<if test="areacode != null and areacode.trim() != ''">
+			AND areacode = #{areacode}
+		</if>
+		<if test="areaname != null and areaname.trim() != ''">
+			AND areaname = #{areaname}
+		</if>
+		<if test="medicalbrandcode != null and medicalbrandcode.trim() != ''">
+			AND medicalbrandcode = #{medicalbrandcode}
+		</if>
+		<if test="medicalbrandname != null and medicalbrandname.trim() != ''">
+			AND medicalbrandname = #{medicalbrandname}
+		</if>
+		<if test="medicalecentercode != null and medicalecentercode.trim() != ''">
+			AND medicalecentercode = #{medicalecentercode}
+		</if>
+		<if test="medicalecentername != null and medicalecentername.trim() != ''">
+			AND medicalecentername = #{medicalecentername}
+		</if>
+		<if test="medicalecenteraddress != null and medicalecenteraddress.trim() != ''">
+			AND medicalecenteraddress = #{medicalecenteraddress}
 		</if>
 	</select>
 	
@@ -72,10 +88,44 @@
 		select count(*) from u_medicalecenter
 		WHERE 1=1
         <if test="name != null and name.trim() != ''">
-            AND name LIKE concat('%',#{name},'%')
+			AND (cityname LIKE concat('%',#{name},'%') or  areaname LIKE concat('%',#{name},'%') or medicalbrandname LIKE concat('%',#{name},'%') or medicalecentername LIKE concat('%',#{name},'%'))
         </if>
 	</select>
-	 
+
+	<select id="queryList" resultType="com.platform.entity.UMedicalecenterEntity">
+		select
+		`id`,
+		`citycode`,
+		`cityname`,
+		`areacode`,
+		`areaname`,
+		`medicalbrandcode`,
+		`medicalbrandname`,
+		`medicalecentercode`,
+		`medicalecentername`,
+		`medicalecenteraddress`,
+		`notopenday`,
+		`inserttime`,
+		`operatetime`
+		from u_medicalecenter
+		WHERE 1=1
+		<if test="name != null and name.trim() != ''">
+			AND (cityname LIKE concat('%',#{name},'%') or  areaname LIKE concat('%',#{name},'%') or medicalbrandname LIKE concat('%',#{name},'%') or medicalecentername LIKE concat('%',#{name},'%'))
+		</if>
+		<choose>
+			<when test="sidx != null and sidx.trim() != ''">
+				order by ${sidx} ${order}
+			</when>
+			<otherwise>
+				group by id order by id  desc
+			</otherwise>
+		</choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+
+	</select>
+
 	<insert id="save" parameterType="com.platform.entity.UMedicalecenterEntity">
 		insert into u_medicalecenter(
 			`id`,
@@ -88,6 +138,7 @@
 			`medicalECenterCode`,
 			`medicalECenterName`,
 			`medicalECenterAddress`,
+			`notopenDay`,
 			`insertTime`,
 			`operateTime`)
 		values(
@@ -101,10 +152,44 @@
 			#{medicalecentercode},
 			#{medicalecentername},
 			#{medicalecenteraddress},
+			#{notopenDay},
 			#{inserttime},
 			#{operatetime})
 	</insert>
-	 
+
+	<insert id="saveList" parameterType="java.util.List">
+		insert into b_reservationcard(
+		`id`,
+		`cityCode`,
+		`cityName`,
+		`areaCode`,
+		`areaName`,
+		`medicalBrandCode`,
+		`medicalBrandName`,
+		`medicalECenterCode`,
+		`medicalECenterName`,
+		`medicalECenterAddress`,
+		`notopenDay`,
+		`insertTime`,
+		`operateTime`)
+		values
+		<foreach collection ="list" item="center" index= "index" separator =",">
+			#{center.id},
+			#{center.citycode},
+			#{center.cityname},
+			#{center.areacode},
+			#{center.areaname},
+			#{center.medicalbrandcode},
+			#{center.medicalbrandname},
+			#{center.medicalecentercode},
+			#{center.medicalecentername},
+			#{center.medicalecenteraddress},
+			#{center.notopenDay},
+			#{center.inserttime},
+			#{center.operatetime})
+		</foreach >
+	</insert>
+
 	<update id="update" parameterType="com.platform.entity.UMedicalecenterEntity">
 		update u_medicalecenter 
 		<set>
@@ -117,8 +202,9 @@
 			<if test="medicalecentercode != null">`medicalECenterCode` = #{medicalecentercode}, </if>
 			<if test="medicalecentername != null">`medicalECenterName` = #{medicalecentername}, </if>
 			<if test="medicalecenteraddress != null">`medicalECenterAddress` = #{medicalecenteraddress}, </if>
+			<if test="notopenDay != null">`notopenDay` = #{notopenDay}, </if>
 			<if test="inserttime != null">`insertTime` = #{inserttime}, </if>
-			<if test="operatetime != null">`operateTime` = #{operatetime}</if>
+			<if test="operatetime != null">`operateTime`=now()</if>
 		</set>
 		where id = #{id}
 	</update>

@@ -1,8 +1,8 @@
 package com.platform.service.impl;
 
-import com.platform.dao.UDictOptionDao;
+import com.platform.dao.ApiUDictOptionDao;
 import com.platform.entity.UDictOptionEntity;
-import com.platform.service.UDictOptionService;
+import com.platform.service.ApiUDictOptionService;
 import com.platform.utils.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,44 +16,44 @@ import java.util.Map;
  * @author lipengjun
  * @date 2019-04-26 18:24:29
  */
-@Service("uDictOptionService")
-public class UDictOptionServiceImpl implements UDictOptionService {
+@Service("apiUDictOptionService")
+public class ApiUDictOptionServiceImpl implements ApiUDictOptionService {
     @Autowired
-    private UDictOptionDao uDictOptionDao;
+    private ApiUDictOptionDao apiUDictOptionDao;
 
     @Override
     public UDictOptionEntity queryObject(String id) {
-        return uDictOptionDao.queryObject(id);
+        return apiUDictOptionDao.queryObject(id);
     }
 
     @Override
     public List<UDictOptionEntity> queryList(Map<String, Object> map) {
-        return uDictOptionDao.queryList(map);
+        return apiUDictOptionDao.queryList(map);
     }
 
     @Override
     public int queryTotal(Map<String, Object> map) {
-        return uDictOptionDao.queryTotal(map);
+        return apiUDictOptionDao.queryTotal(map);
     }
 
     @Override
     public int save(UDictOptionEntity uDictOption) {
         uDictOption.setId(IdUtil.createIdbyUUID());
-        return uDictOptionDao.save(uDictOption);
+        return apiUDictOptionDao.save(uDictOption);
     }
 
     @Override
     public int update(UDictOptionEntity uDictOption) {
-        return uDictOptionDao.update(uDictOption);
+        return apiUDictOptionDao.update(uDictOption);
     }
 
     @Override
     public int delete(String id) {
-        return uDictOptionDao.delete(id);
+        return apiUDictOptionDao.delete(id);
     }
 
     @Override
     public int deleteBatch(String[] ids) {
-        return uDictOptionDao.deleteBatch(ids);
+        return apiUDictOptionDao.deleteBatch(ids);
     }
 }

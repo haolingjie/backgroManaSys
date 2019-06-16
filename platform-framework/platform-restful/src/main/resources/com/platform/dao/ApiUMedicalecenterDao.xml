@@ -14,6 +14,7 @@
         <result property="medicalecentercode" column="medicalECenterCode"/>
         <result property="medicalecentername" column="medicalECenterName"/>
         <result property="medicalecenteraddress" column="medicalECenterAddress"/>
+        <result property="notopenDay" column="notopenDay"/>
         <result property="inserttime" column="insertTime"/>
         <result property="operatetime" column="operateTime"/>
     </resultMap>
@@ -30,6 +31,7 @@
 			`medicalECenterCode`,
 			`medicalECenterName`,
 			`medicalECenterAddress`,
+			`notopenDay`,
 			`insertTime`,
 			`operateTime`
 		from u_medicalecenter

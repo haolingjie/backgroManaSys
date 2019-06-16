@@ -54,6 +54,10 @@ public class UMedicalecenterEntity implements Serializable {
      */
     private String medicalecenteraddress;
     /**
+     * 不开放日期
+     */
+    private String notopenDay;
+    /**
      * 插入时间
      */
     private Date inserttime;
@@ -192,6 +196,15 @@ public class UMedicalecenterEntity implements Serializable {
     public String getMedicalecenteraddress() {
         return medicalecenteraddress;
     }
+
+    public String getNotopenDay() {
+        return notopenDay;
+    }
+
+    public void setNotopenDay(String notopenDay) {
+        this.notopenDay = notopenDay;
+    }
+
     /**
      * 设置：插入时间
      */

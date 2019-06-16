@@ -4,16 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.platform.annotation.IgnoreAuth;
 import com.platform.cache.J2CacheUtils;
-import com.platform.entity.MCardmessageEntity;
-import com.platform.entity.UMedicalecenterEntity;
+import com.platform.entity.*;
 import com.platform.entity.vo.CardInfoVo;
-import com.platform.entity.WXLoginVO;
 import com.platform.entity.vo.MedicalCenterVO;
 import com.platform.entity.vo.WeiXinDate;
 import com.platform.model.page.BusiReservationCardPage;
-import com.platform.service.ApiCardService;
-import com.platform.service.ApiMCardmessageService;
-import com.platform.service.ApiUMedicalecenterService;
+import com.platform.service.*;
 import com.platform.util.DateUtils;
 import com.platform.util.HttpClientUtil;
 import com.platform.util.wechat.WechatUtil;
@@ -48,6 +44,12 @@ public class ApiWeChatController {
 
     @Autowired
     private ApiUMedicalecenterService apiUMedicalecenterService;
+
+    @Autowired
+    private ApiUDictGroupService apiUDictGroupService;
+
+    @Autowired
+    private ApiUDictOptionService apiUDictOptionService;
 
     @Autowired
     private ApiMCardmessageService apiMCardmessageService;
@@ -162,40 +164,51 @@ public class ApiWeChatController {
             String currDate = DateUtils.getCurrDate();
             Calendar calendar = Calendar.getInstance();
             int month = calendar.get(Calendar.MONTH);
+            //不开放日期排除
+            String notopenDay = centerEntity.getNotopenDay();
             //日历，日期选择器
-            for(int i=0;i<55;i++) {
+            for(int i=0;i<60;i++) {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int year = calendar.get(Calendar.YEAR);
                 int weekday = calendar.get(Calendar.DAY_OF_WEEK);
                 int forMonth = calendar.get(Calendar.MONTH);
-                if(month == forMonth){
-                    if(weekday == 1){
+                if(weekday == 1){
 //                        curRemoveDateList.add(day);
-                    }else{
-                        curCanDateList.add(day);
-                        WeiXinDate weiXinDate = new WeiXinDate(year, forMonth+1, day);
-                        allOrageDates.add(weiXinDate);
-                    }
                 }else{
-                    if(weekday == 1){
-//                        nextRemoveDateList.add(day);
-                    }else{
-                        WeiXinDate weiXinDate = new WeiXinDate(year, forMonth+1, day);
+                    boolean isAdd=true;
+                    if(StringUtils.isNotBlank(notopenDay)){
+                        String[] notopenDayArr = notopenDay.split(",");
+                        for(int y=0;y<notopenDayArr.length;y++){
+                            Date notopenDate = DateUtils.convertStringToDate(notopenDayArr[y]);
+                            Calendar notopenDayCalendar = Calendar.getInstance();
+                            notopenDayCalendar.setTime(notopenDate);
+                            if(notopenDayCalendar.get(Calendar.YEAR) == year && notopenDayCalendar.get(Calendar.MONTH) == forMonth && notopenDayCalendar.get(Calendar.DAY_OF_MONTH) == day){
+                                isAdd=false;
+                                break;
+                            }
+
+                        }
+                    }
+                    if(isAdd) {
+                        if(month == forMonth) {
+                            curCanDateList.add(day);
+                        }
+                        WeiXinDate weiXinDate = new WeiXinDate(year, forMonth + 1, day);
                         allOrageDates.add(weiXinDate);
                     }
                 }
                 calendar.add(Calendar.DATE, 1);
             }
             String startDate = DateUtils.getNextDay(currDate, 1);
-            //排除日期,后期从数据库查出来
-            String removeDate = DateUtils.getNextDay(currDate, 5);
+//            String removeDate = DateUtils.getNextDay(currDate, 5);
+
 //            removeDateList.add(removeDate);
             String endDate = DateUtils.getNextDay(currDate,14);
             returnMap.put("cardInfoVo", cardInfoResult);
             returnMap.put("medicalCenterVO", medicalCenterVO);
 
-            returnMap.put("startDate", startDate);
-            returnMap.put("endDate", endDate);
+//            returnMap.put("startDate", startDate);
+//            returnMap.put("endDate", endDate);
             returnMap.put("curCanDateList", curCanDateList);
 //            returnMap.put("curRemoveDateList", curRemoveDateList);
             returnMap.put("allOrageDates", allOrageDates);
@@ -346,5 +359,35 @@ public class ApiWeChatController {
         mCardmessageEntity.setOperatetime(new Date());
         apiMCardmessageService.save(mCardmessageEntity);
         return R.ok(msg);
+    }
+
+    @PostMapping("/getTongCardStlyle")
+    @IgnoreAuth
+    public R activateCard(@RequestBody CardInfoVo cardInfoVo) {
+        String tongCardStlyle="";
+        String cardcode = cardInfoVo.getCardcode();
+        if(StringUtils.isNotBlank(cardcode)){
+            char option = cardcode.charAt(0);
+            HashMap<String, Object> paramMap = new HashMap<>();
+            paramMap.put("groupCode","cardCode");
+            paramMap.put("categoryCode",option);
+            List<UDictGroupEntity> uDictGroupEntities = apiUDictGroupService.queryList(paramMap);
+            if(uDictGroupEntities != null && uDictGroupEntities.size()>0){
+                UDictGroupEntity uDictGroupEntity = uDictGroupEntities.get(0);
+                paramMap.clear();
+                paramMap.put("groupCodeId",uDictGroupEntity.getId());
+                List<UDictOptionEntity> uDictOptionEntities = apiUDictOptionService.queryList(paramMap);
+                if(uDictOptionEntities != null && uDictOptionEntities.size()>0){
+                    for (UDictOptionEntity entity:uDictOptionEntities) {
+                        if(StringUtils.equals("tongCard",entity.getOptioncode())){
+                            tongCardStlyle=entity.getOptionimport();
+                        }
+
+                    }
+                }
+
+            }
+        }
+        return R.ok().put("tongCardStlyle",tongCardStlyle);
     }
 }

@@ -284,6 +284,26 @@ public class DateUtils{
     }
 
     /**
+     * 将字符串类型的转换成Date类型
+     *
+     * @param dateStr 字符串类型的日期 yyyy-MM-dd
+     * @return Date类型的日期
+     * @throws ParseException
+     */
+    public static Date convertStringToDate(String dateStr) {
+        // 返回的日期
+        Date resultDate = null;
+        try {
+            // 日期格式转换
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            resultDate = sdf.parse(dateStr);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return resultDate;
+    }
+
+    /**
      * 获取指定年月份的第一天
      * @param year
      * @param month

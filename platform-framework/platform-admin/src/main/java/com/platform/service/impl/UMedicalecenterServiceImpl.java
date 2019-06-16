@@ -7,6 +7,7 @@ import com.platform.utils.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -55,5 +56,15 @@ public class UMedicalecenterServiceImpl implements UMedicalecenterService {
     @Override
     public int deleteBatch(String[] ids) {
         return uMedicalecenterDao.deleteBatch(ids);
+    }
+
+    @Override
+    public void saveList(ArrayList<UMedicalecenterEntity> centerEntities) {
+        uMedicalecenterDao.saveList(centerEntities);
+    }
+
+    @Override
+    public List<UMedicalecenterEntity> queryListNotPage(Map<String, Object> paramMap) {
+        return uMedicalecenterDao.queryListNotPage(paramMap);
     }
 }

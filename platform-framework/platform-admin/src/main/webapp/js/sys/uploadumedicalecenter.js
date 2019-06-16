@@ -1,38 +1,43 @@
 $(function () {
     $("#jqGrid").Grid({
-        url: '../mcardmessage/list',
+        url: '../umedicalecenter/uploadlist',
         colModel: [
 			{label: 'id', name: 'id', index: 'id', key: true, hidden: true},
-			{label: '卡号', name: 'cardcode', index: 'cardCode', width: 80},
-			{label: '医疗卡状态', name: 'cardstatus', index: 'cardStatus', width: 80,formatter: function (value) {
-					if(value =="0"){
-						return '未激活'
-					}else if(value == '1'){
-						return '已激活';
-					}else if(value == '2'){
-						return '2已预购';
-					}else if(value == '3'){
-						return '已到检';
-					}else if(value == '4'){
-						return '已过期';
-					}else{
-						return value;
-					}
-			}},
-			{label: '消息有效位', name: 'status', index: 'status', width: 80, formatter: function (value) {
-					if(value == '0'){
-						return '无效';
-					}else if(value == '1'){
-						return '有效';
-					}else{
-						return value;
-					}
-			}},
+			{label: '城市代码', name: 'citycode', index: 'cityCode', width: 80},
+			{label: '城市名称', name: 'cityname', index: 'cityName', width: 80},
+			{label: '地区代码', name: 'areacode', index: 'areaCode', width: 80},
+			{label: '地区名称', name: 'areaname', index: 'areaName', width: 80},
+			{label: '医疗品牌代码', name: 'medicalbrandcode', index: 'medicalBrandCode', width: 80},
+			{label: '医疗品牌名称', name: 'medicalbrandname', index: 'medicalBrandName', width: 80},
+			{label: '体检中心代码', name: 'medicalecentercode', index: 'medicalECenterCode', width: 80},
+			{label: '体检中心名称', name: 'medicalecentername', index: 'medicalECenterName', width: 80},
+			{label: '不开放日期', name: 'notopenDay', index: 'notopenDay', width: 80},
 			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80, formatter: function (value) {
 					return transDate(value);}},
 			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80, formatter: function (value) {
-					return transDate(value);}}]
+					return transDate(value);}},],
+		rowList: [9999999],
+		rowNum: 9999999,
     });
+	new AjaxUpload('#upload', {
+		action: '../umedicalecenter/upload',
+		name: 'file',
+		autoSubmit: true,
+		responseType: "json",
+		onSubmit: function (file, extension) {
+			if (!(extension && /^(xls|xlsx)$/.test(extension.toLowerCase()))) {
+				alert('只支持jpg、png、gif格式的图片！');
+				return false;
+			}
+		},
+		onComplete: function (file, r) {
+			if (r.code == 0) {
+				vm.reload();
+			} else {
+				alert(r.msg);
+			}
+		}
+	});
 });
 
 let vm = new Vue({
@@ -40,67 +45,24 @@ let vm = new Vue({
 	data: {
         showList: true,
         title: null,
-		mCardmessage: {},
+		uMedicalecenter: {},
 		ruleValidate: {
 			name: [
 				{required: true, message: '名称不能为空', trigger: 'blur'}
 			]
 		},
 		q: {
-		    name: '',
-			cardStatus: '',
-			delayMonth: '',
+		    name: ''
 		}
 	},
 	methods: {
 		query: function () {
 			vm.reload();
 		},
-		activite: function () {
-			let ids = getAllSelectedRows("#jqGrid");
-			if (ids == null || ids.length ==0){
-				alert('请选择激活数据');
-				return;
-			}
-			Ajax.request({
-				url: "../mcardmessage/activite",
-				params: JSON.stringify(ids),
-				type: "POST",
-				contentType: "application/json",
-				successCallback: function (r) {
-					alert('操作成功', function (index) {
-						vm.reload();
-					});
-				}
-			});
-		},
-		delay: function () {
-			let ids = getAllSelectedRows("#jqGrid");
-			if (ids == null || ids.length ==0){
-				alert('请选择延期数据');
-				return;
-			}
-			if(vm.q.delayMonth== null || vm.q.delayMonth == ''){
-				alert('请选择延期时间');
-				return;
-			}
-			var data={ids:ids,delayMonth:vm.q.delayMonth};
-			Ajax.request({
-				url: "../mcardmessage/delay",
-				params: JSON.stringify(data),
-				type: "POST",
-				contentType: "application/json",
-				successCallback: function (r) {
-					alert('操作成功', function (index) {
-						vm.reload();
-					});
-				}
-			});
-		},
 		add: function () {
 			vm.showList = false;
 			vm.title = "新增";
-			vm.mCardmessage = {};
+			vm.uMedicalecenter = {};
 		},
 		update: function (event) {
             let id = getSelectedRow("#jqGrid");
@@ -113,10 +75,10 @@ let vm = new Vue({
             vm.getInfo(id);
 		},
 		saveOrUpdate: function (event) {
-            let url = vm.mCardmessage.id == null ? "../mcardmessage/save" : "../mcardmessage/update";
+            let url = vm.uMedicalecenter.id == null ? "../umedicalecenter/save" : "../umedicalecenter/update";
             Ajax.request({
 			    url: url,
-                params: JSON.stringify(vm.mCardmessage),
+                params: JSON.stringify(vm.uMedicalecenter),
                 type: "POST",
 			    contentType: "application/json",
                 successCallback: function (r) {
@@ -124,6 +86,22 @@ let vm = new Vue({
                         vm.reload();
                     });
                 }
+			});
+		},
+		saveCenterInfo: function (event) {
+			var obj=$("#jqGrid").jqGrid("getRowData");
+			var data={centerInfo : obj};
+			let url = "../umedicalecenter/saveCenterInfo";
+			Ajax.request({
+				url: url,
+				params: JSON.stringify(data),
+				type: "POST",
+				contentType: "application/json",
+				successCallback: function (r) {
+					alert('操作成功', function (index) {
+						vm.reload();
+					});
+				}
 			});
 		},
 		del: function (event) {
@@ -134,7 +112,7 @@ let vm = new Vue({
 
 			confirm('确定要删除选中的记录？', function () {
                 Ajax.request({
-				    url: "../mcardmessage/delete",
+				    url: "../umedicalecenter/delete",
                     params: JSON.stringify(ids),
                     type: "POST",
 				    contentType: "application/json",
@@ -148,10 +126,10 @@ let vm = new Vue({
 		},
 		getInfo: function(id){
             Ajax.request({
-                url: "../mcardmessage/info/"+id,
+                url: "../umedicalecenter/info/"+id,
                 async: true,
                 successCallback: function (r) {
-                    vm.mCardmessage = r.mCardmessage;
+                    vm.uMedicalecenter = r.uMedicalecenter;
                 }
             });
 		},
@@ -159,7 +137,7 @@ let vm = new Vue({
 			vm.showList = true;
             let page = $("#jqGrid").jqGrid('getGridParam', 'page');
 			$("#jqGrid").jqGrid('setGridParam', {
-                postData: {'cardcode': vm.q.name,'cardstatus':vm.q.cardStatus},
+                postData: {'name': vm.q.name},
                 page: page
             }).trigger("reloadGrid");
             vm.handleReset('formValidate');

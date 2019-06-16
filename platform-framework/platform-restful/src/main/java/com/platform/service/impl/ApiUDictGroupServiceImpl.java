@@ -1,8 +1,8 @@
 package com.platform.service.impl;
 
-import com.platform.dao.UDictGroupDao;
+import com.platform.dao.ApiUDictGroupDao;
 import com.platform.entity.UDictGroupEntity;
-import com.platform.service.UDictGroupService;
+import com.platform.service.ApiUDictGroupService;
 import com.platform.utils.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,44 +16,44 @@ import java.util.Map;
  * @author lipengjun
  * @date 2019-04-26 18:24:29
  */
-@Service("uDictGroupService")
-public class UDictGroupServiceImpl implements UDictGroupService {
+@Service("apiUDictGroupService")
+public class ApiUDictGroupServiceImpl implements ApiUDictGroupService {
     @Autowired
-    private UDictGroupDao uDictGroupDao;
+    private ApiUDictGroupDao apiUDictGroupDao;
 
     @Override
     public UDictGroupEntity queryObject(String id) {
-        return uDictGroupDao.queryObject(id);
+        return apiUDictGroupDao.queryObject(id);
     }
 
     @Override
     public List<UDictGroupEntity> queryList(Map<String, Object> map) {
-        return uDictGroupDao.queryList(map);
+        return apiUDictGroupDao.queryList(map);
     }
 
     @Override
     public int queryTotal(Map<String, Object> map) {
-        return uDictGroupDao.queryTotal(map);
+        return apiUDictGroupDao.queryTotal(map);
     }
 
     @Override
     public int save(UDictGroupEntity uDictGroup) {
         uDictGroup.setId(IdUtil.createIdbyUUID());
-        return uDictGroupDao.save(uDictGroup);
+        return apiUDictGroupDao.save(uDictGroup);
     }
 
     @Override
     public int update(UDictGroupEntity uDictGroup) {
-        return uDictGroupDao.update(uDictGroup);
+        return apiUDictGroupDao.update(uDictGroup);
     }
 
     @Override
     public int delete(String id) {
-        return uDictGroupDao.delete(id);
+        return apiUDictGroupDao.delete(id);
     }
 
     @Override
     public int deleteBatch(String[] ids) {
-        return uDictGroupDao.deleteBatch(ids);
+        return apiUDictGroupDao.deleteBatch(ids);
     }
 }

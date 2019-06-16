@@ -16,8 +16,11 @@
         <result property="medicaldate" column="medicalDate"/>
         <result property="cardstatus" column="cardStatus"/>
         <result property="sendaddress" column="sendAddress"/>
-        <result property="inserttime" column="insertTime"/>
-        <result property="operatetime" column="operateTime"/>
+		<result property="modifyFlag" column="modifyFlag"/>
+		<result property="startDate" column="startDate"/>
+		<result property="endDate" column="endDate"/>
+		<result property="inserttime" column="insertTime"/>
+		<result property="operatetime" column="operateTime"/>
     </resultMap>
 
 	<select id="queryObject" resultType="com.platform.entity.BReservationcardEntity">
@@ -34,6 +37,8 @@
 			`medicalDate`,
 			`cardStatus`,
 			`sendAddress`,
+			`endDate`,
+			`startDate`,
 			`insertTime`,
 			`operateTime`
 		from b_reservationcard
@@ -54,19 +59,25 @@
     		`medicalDate`,
     		`cardStatus`,
     		`sendAddress`,
+			`endDate`,
+			`startDate`,
+    		`modifyFlag`,
     		`insertTime`,
     		`operateTime`
 		from b_reservationcard
 		WHERE 1=1
 		<if test="name != null and name.trim() != ''">
-			AND name LIKE concat('%',#{name},'%')
+			AND cardCode LIKE concat('%',#{name},'%')
+		</if>
+		<if test="cardstatus != null and cardstatus.trim() != ''">
+			AND cardstatus=#{cardstatus}
 		</if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
             </when>
 			<otherwise>
-                order by id desc
+                order by operateTime desc
 			</otherwise>
         </choose>
 		<if test="offset != null and limit != null">
@@ -78,8 +89,11 @@
 		select count(*) from b_reservationcard
 		WHERE 1=1
         <if test="name != null and name.trim() != ''">
-            AND name LIKE concat('%',#{name},'%')
+            AND cardCode LIKE concat('%',#{name},'%')
         </if>
+		<if test="cardstatus != null and cardstatus.trim() != ''">
+			AND cardstatus=#{cardstatus}
+		</if>
 	</select>
 	 
 	<insert id="save" parameterType="com.platform.entity.BReservationcardEntity">
@@ -96,6 +110,9 @@
 			`medicalDate`,
 			`cardStatus`,
 			`sendAddress`,
+			`endDate`,
+			`startDate`,
+			`modifyFlag`,
 			`insertTime`,
 			`operateTime`)
 		values(
@@ -111,6 +128,9 @@
 			#{medicaldate},
 			#{cardstatus},
 			#{sendaddress},
+			#{endDate},
+			#{startDate},
+			#{modifyFlag},
 			#{inserttime},
 			#{operatetime})
 	</insert>
@@ -129,6 +149,9 @@
 			`medicalDate`,
 			`cardStatus`,
 			`sendAddress`,
+			`endDate`,
+			`startDate`,
+		     modifyFlag,
 			`insertTime`,
 			`operateTime`)
 		values
@@ -146,6 +169,9 @@
 			#{card.medicaldate},
 			#{card.cardstatus},
 			#{card.sendaddress},
+			#{endDate},
+			#{startDate},
+			#{card.modifyFlag},
 			#{card.inserttime},
 			#{card.operatetime}
 			)
@@ -166,6 +192,7 @@
 			<if test="medicaldate != null">`medicalDate` = #{medicaldate}, </if>
 			<if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
 			<if test="sendaddress != null">`sendAddress` = #{sendaddress}, </if>
+			<if test="modifyFlag != null">`modifyFlag` = #{modifyFlag}, </if>
 			<if test="endDate != null">`endDate` = #{endDate}, </if>
 			<if test="startDate != null">`startDate` = #{startDate}, </if>
 			`operateTime` = now()
@@ -186,6 +213,7 @@
 			<if test="medicaldate != null">`medicalDate` = #{medicaldate}, </if>
 			<if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
 			<if test="sendaddress != null">`sendAddress` = #{sendaddress}, </if>
+			<if test="modifyFlag != null">`modifyFlag` = #{modifyFlag}, </if>
 			<if test="endDate != null">`endDate` = #{endDate}, </if>
 			<if test="startDate != null">`startDate` = #{startDate}, </if>
 			`operateTime` = now()

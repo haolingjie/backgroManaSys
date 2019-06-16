@@ -2,6 +2,10 @@ package com.platform.dao;
 
 import com.platform.entity.UMedicalecenterEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * 套餐明细表Dao
  *
@@ -10,4 +14,7 @@ import com.platform.entity.UMedicalecenterEntity;
  */
 public interface UMedicalecenterDao extends BaseDao<UMedicalecenterEntity> {
 
+    void saveList(ArrayList<UMedicalecenterEntity> centerEntities);
+
+    List<UMedicalecenterEntity> queryListNotPage(Map<String, Object> paramMap);
 }

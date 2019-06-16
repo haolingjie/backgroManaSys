@@ -12,8 +12,11 @@ $(function () {
 			{label: '体检中心代码', name: 'medicalecentercode', index: 'medicalECenterCode', width: 80},
 			{label: '体检中心名称', name: 'medicalecentername', index: 'medicalECenterName', width: 80},
 			{label: '体检中心地址', name: 'medicalecenteraddress', index: 'medicalECenterAddress', width: 80},
-			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80},
-			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80}]
+			{label: '不开放日期', name: 'notopenDay', index: 'notopenDay', width: 80},
+			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80, formatter: function (value) {
+					return transDate(value);}},
+			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80, formatter: function (value) {
+					return transDate(value);}},],
     });
 });
 
@@ -21,6 +24,8 @@ let vm = new Vue({
 	el: '#rrapp',
 	data: {
         showList: true,
+		notopenDayshowList: true,
+		notopenDay: '',
         title: null,
 		uMedicalecenter: {},
 		ruleValidate: {
@@ -50,6 +55,34 @@ let vm = new Vue({
             vm.title = "修改";
 
             vm.getInfo(id);
+		},updateNotOpneDay: function (event) {
+			vm.notopenDayshowList = false;
+            vm.title = "修改所有中心的不开放日期";
+		},updateNotOpneDaySubmit: function (event) {
+			if($.trim(vm.notopenDay) == ''){
+				return;
+			}
+			Ajax.request({
+				url: "../umedicalecenter/updateNotAllOpneDay",
+				params: JSON.stringify({notopenDay:vm.notopenDay}),
+				type: "POST",
+				contentType: "application/json",
+				successCallback: function (r) {
+					alert('操作成功', function (index) {
+						vm.reload();
+					});
+				}
+			});
+		},
+		returnNotOpenDay: function (event) {
+			vm.notopenDay = event;
+		},
+		uMedicalecenterNotOpenDay: function (event) {
+			if(vm.uMedicalecenter.notopenDay == null || $.trim(vm.uMedicalecenter.notopenDay)== ''){
+				vm.uMedicalecenter.notopenDay =  event;
+			}else {
+				vm.uMedicalecenter.notopenDay = vm.uMedicalecenter.notopenDay + "," + event;
+			}
 		},
 		saveOrUpdate: function (event) {
             let url = vm.uMedicalecenter.id == null ? "../umedicalecenter/save" : "../umedicalecenter/update";
@@ -96,6 +129,8 @@ let vm = new Vue({
 		},
 		reload: function (event) {
 			vm.showList = true;
+			vm.notopenDayshowList = true;
+			vm.notopenDay='';
             let page = $("#jqGrid").jqGrid('getGridParam', 'page');
 			$("#jqGrid").jqGrid('setGridParam', {
                 postData: {'name': vm.q.name},

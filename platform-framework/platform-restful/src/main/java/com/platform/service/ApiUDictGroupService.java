@@ -11,7 +11,7 @@ import java.util.Map;
  * @author lipengjun
  * @date 2019-04-26 18:24:29
  */
-public interface UDictGroupService {
+public interface ApiUDictGroupService {
 
     /**
      * 根据主键查询实体
