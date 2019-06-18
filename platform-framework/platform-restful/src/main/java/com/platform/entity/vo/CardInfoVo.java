@@ -47,7 +47,7 @@ public class CardInfoVo implements Serializable {
      */
     private String medicaldateStr;
 
-    private List<FormId> formIdList;
+    private List<FormId> formIds;
 
 
     public String getCardcode() {
@@ -130,11 +130,11 @@ public class CardInfoVo implements Serializable {
         this.openId = openId;
     }
 
-    public List<FormId> getFormIdList() {
-        return formIdList;
+    public List<FormId> getFormIds() {
+        return formIds;
     }
 
-    public void setFormIdList(List<FormId> formIdList) {
-        this.formIdList = formIdList;
+    public void setFormIds(List<FormId> formIds) {
+        this.formIds = formIds;
     }
 }

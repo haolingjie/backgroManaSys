@@ -106,6 +106,8 @@ public class ApiWeChatController {
             apiCardService.update(cardPage);
         } catch (Exception e) {
             log.error("微信修改卡片信息异常" + JSONObject.toJSONString(cardInfoVo) + ExceptionUtil.getStackTrace(e));
+            return R.error("修改卡片信息失败");
+
         }
         return R.ok();
     }
@@ -136,6 +138,7 @@ public class ApiWeChatController {
             log.info("选择体检机构信息结果" + JSONObject.toJSONString(medicalCenterVOs));
         } catch (Exception e) {
             log.error("选择体检机构信息异常" + ExceptionUtil.getStackTrace(e));
+            return R.error("初始化选择体检机构失败");
         }
         return R.ok(returnMap);
     }
@@ -217,6 +220,7 @@ public class ApiWeChatController {
             log.info("初始化体检日期页面查询结果" + JSONObject.toJSONString(returnMap));
         } catch (Exception e) {
             log.error("初始化体检日期页面报错" + ExceptionUtil.getStackTrace(e));
+            return R.error("初始化体检日期页面失败");
         }
         return R.ok(returnMap);
     }
@@ -238,6 +242,7 @@ public class ApiWeChatController {
             apiCardService.update(cardPage);
         } catch (Exception e) {
             log.error("体检信息确认页面报错" + ExceptionUtil.getStackTrace(e));
+            return R.error("确认预约失败");
         }
         return R.ok();
     }
@@ -249,7 +254,7 @@ public class ApiWeChatController {
         HashMap<String, Object> returnMap = new HashMap<>();
         BusiReservationCardPage card = new BusiReservationCardPage();
         CardInfoVo cardInfoResult = new CardInfoVo();
-        J2CacheUtils.put(Constant.FORMIDCACHE + "mina:openid:" + cardInfoVo.getOpenId(), cardInfoVo.getFormIdList());
+        J2CacheUtils.put(Constant.FORMIDCACHE + "mina:openid:" + cardInfoVo.getOpenId(), cardInfoVo.getFormIds());
 
         log.info("初始化预约信息查看页面入参:" + JSONObject.toJSONString(cardInfoVo));
         try {
@@ -272,6 +277,8 @@ public class ApiWeChatController {
             log.info("初始化预约信息查看页面" + JSONObject.toJSONString(returnMap));
         } catch (Exception e) {
             log.error("初始化预约信息查看页面" + ExceptionUtil.getStackTrace(e));
+            return R.error("初始化预约信息查看页面失败");
+
         }
         return R.ok(returnMap);
     }
