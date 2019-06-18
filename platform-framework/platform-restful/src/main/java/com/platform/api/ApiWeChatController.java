@@ -370,7 +370,7 @@ public class ApiWeChatController {
             char option = cardcode.charAt(0);
             HashMap<String, Object> paramMap = new HashMap<>();
             paramMap.put("groupCode","cardCode");
-            paramMap.put("categoryCode",option);
+            paramMap.put("categoryCode",option+"");
             List<UDictGroupEntity> uDictGroupEntities = apiUDictGroupService.queryList(paramMap);
             if(uDictGroupEntities != null && uDictGroupEntities.size()>0){
                 UDictGroupEntity uDictGroupEntity = uDictGroupEntities.get(0);

@@ -40,8 +40,11 @@
     		`operateTime`
 		from u_dict_option
 		WHERE 1=1
-		<if test="name != null and name.trim() != ''">
-			AND name LIKE concat('%',#{name},'%')
+		<if test="groupCodeId != null and groupCodeId.trim() != ''">
+			AND groupCodeId =#{groupCodeId}
+		</if>
+		<if test="optionCode != null and optionCode.trim() != ''">
+			AND optionCode =#{optionCode}
 		</if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
