@@ -198,6 +198,7 @@ public class HttpClientUtil {
         String resultString = "";
         try {
             // 创建Http Post请求
+            URL urlentity = new URL(url);
             HttpPost httpPost = new HttpPost(url);
             // 创建请求内容
             StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);

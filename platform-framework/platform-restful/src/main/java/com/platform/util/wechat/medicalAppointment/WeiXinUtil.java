@@ -82,4 +82,6 @@ public class WeiXinUtil {
         return token;
     }
 
+
+
 }

@@ -31,6 +31,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -54,6 +59,7 @@ public class ApiWeChatController {
     @Autowired
     private ApiMCardmessageService apiMCardmessageService;
     private static Logger log = LoggerFactory.getLogger(ApiWeChatController.class);
+    private static String token = "112233aabcc";
 
     @ApiOperation(value = "微信登陆", notes = "微信登陆")
     @IgnoreAuth
@@ -170,30 +176,30 @@ public class ApiWeChatController {
             //不开放日期排除
             String notopenDay = centerEntity.getNotopenDay();
             //日历，日期选择器
-            for(int i=0;i<60;i++) {
+            for (int i = 0; i < 60; i++) {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 int year = calendar.get(Calendar.YEAR);
                 int weekday = calendar.get(Calendar.DAY_OF_WEEK);
                 int forMonth = calendar.get(Calendar.MONTH);
-                if(weekday == 1){
+                if (weekday == 1) {
 //                        curRemoveDateList.add(day);
-                }else{
-                    boolean isAdd=true;
-                    if(StringUtils.isNotBlank(notopenDay)){
+                } else {
+                    boolean isAdd = true;
+                    if (StringUtils.isNotBlank(notopenDay)) {
                         String[] notopenDayArr = notopenDay.split(",");
-                        for(int y=0;y<notopenDayArr.length;y++){
+                        for (int y = 0; y < notopenDayArr.length; y++) {
                             Date notopenDate = DateUtils.convertStringToDate(notopenDayArr[y]);
                             Calendar notopenDayCalendar = Calendar.getInstance();
                             notopenDayCalendar.setTime(notopenDate);
-                            if(notopenDayCalendar.get(Calendar.YEAR) == year && notopenDayCalendar.get(Calendar.MONTH) == forMonth && notopenDayCalendar.get(Calendar.DAY_OF_MONTH) == day){
-                                isAdd=false;
+                            if (notopenDayCalendar.get(Calendar.YEAR) == year && notopenDayCalendar.get(Calendar.MONTH) == forMonth && notopenDayCalendar.get(Calendar.DAY_OF_MONTH) == day) {
+                                isAdd = false;
                                 break;
                             }
 
                         }
                     }
-                    if(isAdd) {
-                        if(month == forMonth) {
+                    if (isAdd) {
+                        if (month == forMonth) {
                             curCanDateList.add(day);
                         }
                         WeiXinDate weiXinDate = new WeiXinDate(year, forMonth + 1, day);
@@ -206,7 +212,7 @@ public class ApiWeChatController {
 //            String removeDate = DateUtils.getNextDay(currDate, 5);
 
 //            removeDateList.add(removeDate);
-            String endDate = DateUtils.getNextDay(currDate,14);
+            String endDate = DateUtils.getNextDay(currDate, 14);
             returnMap.put("cardInfoVo", cardInfoResult);
             returnMap.put("medicalCenterVO", medicalCenterVO);
 
@@ -289,9 +295,9 @@ public class ApiWeChatController {
     public R wxLogin(String code) {
         Map<String, Object> resultMap = new HashMap<>();
         String result = HttpClientUtil.doGet(WechatUtil.getOpenIdUrl + code);
-        if(StringUtils.isNotBlank(result)){
+        if (StringUtils.isNotBlank(result)) {
             JSONObject jsonObject = JSONObject.parseObject(result);
-            resultMap=jsonObject;
+            resultMap = jsonObject;
         }
         return R.ok(resultMap);
     }
@@ -304,12 +310,10 @@ public class ApiWeChatController {
         WxTemplate template = new WxTemplate();
 //        template.setUrl(""+TimedTask.websiteAndProject+"/weixinTwo/gotoOrderConfirm?orderId="+map.get("orderId"));
         template.setTouser("oiTss5Kgo7DDdHfLwtJyeKKTZ6v8");
-        template.setForm_id("formId");
-        template.setTopcolor("#000000");
-        template.setTopcolor("#000000");
+        template.setForm_id("f15850e88c334fdb97710b8db0724049");
         template.setTemplate_id("RzLjLQEakObCwt_aT-SqDKSEp3HwZAJWzx8UlxqHQVY");
-        Map<String, TemplateData> m = new HashMap<String,TemplateData>();
-        TemplateData first = new TemplateData();
+        Map<String, TemplateData> m = new HashMap<String, TemplateData>();
+        /*TemplateData first = new TemplateData();
         first.setColor("#000000");
         first.setValue("您好，您有一条待确认订单。");
 //        m.put("first", first);
@@ -332,11 +336,11 @@ public class ApiWeChatController {
         TemplateData remark4 = new TemplateData();
         remark4.setColor("#929232");
         remark4.setValue("请及时确认订单！");
-        m.put("keyword5", remark);
+        m.put("keyword5", remark);*/
         template.setData(m);
         try {
-            WeixinUtil.sendMessageBefore("",template, m);
-        }catch (Exception e){
+            WeixinUtil.sendMessageBefore("", template, m);
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return R.ok(resultMap);
@@ -345,17 +349,17 @@ public class ApiWeChatController {
     @PostMapping("/activateCard")
     @IgnoreAuth
     public R activateCard(@RequestBody BusiReservationCardPage page) {
-        String msg="";
-        if(StringUtils.equals(page.getCardstatus(),"0")){
-            msg="该卡片未激活，已联系售卡方激活，请留意微信公众号消息提示";
-        }else if(StringUtils.equals(page.getCardstatus(),"4")){
-            msg="该卡片已过期，已联系售卡方延长使用日期，请留意微信公众号消息提示";
+        String msg = "";
+        if (StringUtils.equals(page.getCardstatus(), "0")) {
+            msg = "该卡片未激活，已联系售卡方激活，请留意微信公众号消息提示";
+        } else if (StringUtils.equals(page.getCardstatus(), "4")) {
+            msg = "该卡片已过期，已联系售卡方延长使用日期，请留意微信公众号消息提示";
         }
         Map<String, Object> messageMap = new HashMap<>();
-        messageMap.put("cardcode",page.getCardcode());
-        messageMap.put("cardstatus",page.getCardstatus());
+        messageMap.put("cardcode", page.getCardcode());
+        messageMap.put("cardstatus", page.getCardstatus());
         List<MCardmessageEntity> mCardmessageEntities = apiMCardmessageService.queryList(messageMap);
-        if(mCardmessageEntities != null && mCardmessageEntities.size()>0){
+        if (mCardmessageEntities != null && mCardmessageEntities.size() > 0) {
             return R.ok(msg);
         }
         MCardmessageEntity mCardmessageEntity = new MCardmessageEntity();
@@ -371,24 +375,24 @@ public class ApiWeChatController {
     @PostMapping("/getTongCardStlyle")
     @IgnoreAuth
     public R activateCard(@RequestBody CardInfoVo cardInfoVo) {
-        List<String> tongCardStlyleList=new ArrayList<>();
+        List<String> tongCardStlyleList = new ArrayList<>();
         String cardcode = cardInfoVo.getCardcode();
-        if(StringUtils.isNotBlank(cardcode)){
+        if (StringUtils.isNotBlank(cardcode)) {
             char option = cardcode.charAt(0);
             HashMap<String, Object> paramMap = new HashMap<>();
-            paramMap.put("groupCode","cardCode");
-            paramMap.put("categoryCode",option+"");
+            paramMap.put("groupCode", "cardCode");
+            paramMap.put("categoryCode", option + "");
             List<UDictGroupEntity> uDictGroupEntities = apiUDictGroupService.queryList(paramMap);
-            if(uDictGroupEntities != null && uDictGroupEntities.size()>0){
+            if (uDictGroupEntities != null && uDictGroupEntities.size() > 0) {
                 UDictGroupEntity uDictGroupEntity = uDictGroupEntities.get(0);
                 paramMap.clear();
-                paramMap.put("groupCodeId",uDictGroupEntity.getId());
+                paramMap.put("groupCodeId", uDictGroupEntity.getId());
                 List<UDictOptionEntity> uDictOptionEntities = apiUDictOptionService.queryList(paramMap);
-                if(uDictOptionEntities != null && uDictOptionEntities.size()>0){
-                    for (UDictOptionEntity entity:uDictOptionEntities) {
-                        if(StringUtils.equals("tongCard",entity.getOptioncode())){
-                            String tongCardStlyle=entity.getOptionimport();
-                            if(StringUtils.isNotBlank(tongCardStlyle)){
+                if (uDictOptionEntities != null && uDictOptionEntities.size() > 0) {
+                    for (UDictOptionEntity entity : uDictOptionEntities) {
+                        if (StringUtils.equals("tongCard", entity.getOptioncode())) {
+                            String tongCardStlyle = entity.getOptionimport();
+                            if (StringUtils.isNotBlank(tongCardStlyle)) {
                                 String[] tongCardStlyleArr = tongCardStlyle.split(",");
                                 tongCardStlyleList = Arrays.asList(tongCardStlyleArr);
                             }
@@ -399,6 +403,92 @@ public class ApiWeChatController {
 
             }
         }
-        return R.ok().put("tongCardStlyleList",tongCardStlyleList);
+        return R.ok().put("tongCardStlyleList", tongCardStlyleList);
+    }
+
+    @RequestMapping(value = "/checkToken")
+    public void get(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("========WechatController========= ");
+        log.info("-----来自微信的请求----");
+
+        Enumeration pNames = request.getParameterNames();
+        while (pNames.hasMoreElements()) {
+            String name = (String) pNames.nextElement();
+            String value = request.getParameter(name);
+            //查看微信的请求都带了哪些参数
+            String requestParam = "name =" + name + "  value =" + value;
+            log.info("微信token校验请求"+requestParam);
+        }
+        String signature = request.getParameter("signature");/// 微信加密签名
+        String timestamp = request.getParameter("timestamp");/// 时间戳
+        String nonce = request.getParameter("nonce"); /// 随机数
+        String echostr = request.getParameter("echostr"); // 随机字符串
+        PrintWriter out = response.getWriter();
+        if (checkSignature(signature, timestamp, nonce)) {
+            out.print(echostr);
+        }
+        out.print(token);
+        out.close();
+        out = null;
+    }
+
+      /**
+      * 校验签名
+      */
+    public static boolean checkSignature(String signature, String timestamp, String nonce) {
+        System.out.println("signature:" + signature + "timestamp:" + timestamp + "nonc:" + nonce);
+        String[] arr = new String[]{token, timestamp, nonce};
+        // 将token、timestamp、nonce三个参数进行字典序排序
+        Arrays.sort(arr);
+        StringBuilder content = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            content.append(arr[i]);
+        }
+        MessageDigest md = null;
+        String tmpStr = null;
+
+        try {
+            md = MessageDigest.getInstance("SHA-1");
+            // 将三个参数字符串拼接成一个字符串进行sha1加密
+            byte[] digest = md.digest(content.toString().getBytes());
+            tmpStr = byteToStr(digest);
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+
+        content = null;
+        // 将sha1加密后的字符串可与signature对比，标识该请求来源于微信
+        System.out.println(tmpStr.equals(signature.toUpperCase()));
+        return tmpStr != null ? tmpStr.equals(signature.toUpperCase()) : false;
+    }
+     /**
+       * 将字节数组转换为十六进制字符串
+       *
+       * @param byteArray
+       * @return
+       */
+    private static String byteToStr(byte[] byteArray) {
+        String strDigest = "";
+        for (int i = 0; i < byteArray.length; i++) {
+            strDigest += byteToHexStr(byteArray[i]);
+        }
+        return strDigest;
+    }
+
+    /**
+     *   * 将字节转换为十六进制字符串
+     *   *
+     *   * @param mByte
+     *   * @return
+     *   
+     */
+    private static String byteToHexStr(byte mByte) {
+        char[] Digit = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        char[] tempArr = new char[2];
+        tempArr[0] = Digit[(mByte >>> 4) & 0X0F];
+        tempArr[1] = Digit[mByte & 0X0F];
+
+        String s = new String(tempArr);
+        return s;
     }
 }
