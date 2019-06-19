@@ -68,4 +68,9 @@ public class BReservationcardServiceImpl implements BReservationcardService {
     public void updateByCardCode(BReservationcardEntity entity) {
          bReservationcardDao.updateByCardCode(entity);
     }
+
+    @Override
+    public List<BReservationcardEntity> queryByEntity(BReservationcardEntity entity) {
+        return bReservationcardDao.queryByEntity(entity);
+    }
 }

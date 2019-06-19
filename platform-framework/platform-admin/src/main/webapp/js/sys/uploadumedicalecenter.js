@@ -26,7 +26,7 @@ $(function () {
 		responseType: "json",
 		onSubmit: function (file, extension) {
 			if (!(extension && /^(xls|xlsx)$/.test(extension.toLowerCase()))) {
-				alert('只支持jpg、png、gif格式的图片！');
+				alert('只支持xls、xlsx、格式的文本！');
 				return false;
 			}
 		},

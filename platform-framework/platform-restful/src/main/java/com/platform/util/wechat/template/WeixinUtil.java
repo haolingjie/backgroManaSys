@@ -1,5 +1,6 @@
 package com.platform.util.wechat.template;
 
+import com.alibaba.fastjson.JSON;
 import com.platform.util.HttpClientUtil;
 import com.platform.util.wechat.medicalAppointment.AccessToken;
 import com.platform.util.wechat.medicalAppointment.WeiXinUtil;
@@ -24,12 +25,17 @@ public class WeixinUtil {
     private static Logger log = LoggerFactory.getLogger(WeixinUtil.class);
     // 获取access_token的接口地址（GET） 限200（次/天）
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
-    //发送模板消息的接口
-    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN";
+    //公众号发送模板消息的接口
+    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
     //    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=ACCESS_TOKEN";
 
 
     public static final String SEND_CUSTOM_URL = " https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
+
+    public static final String SUCCESS_NOTICE="successNotice";
+    public static final String SUCCESS_TEMPLATE_ID ="taYKoX8kXDJTo-IAx4tHyMI0m_GcJ5ran54Qdo59pjQ" ;
+    public static final String FAIL_NOTICE="failNotice";
+    public static final String FAIL_TEMPLATE_ID ="2LM24YCd5T7WqOvPUfXiir4gA_9PcsD5Vw1lPaKHAJc" ;
 
 //    /**
 //     * 获取access_token
@@ -83,7 +89,7 @@ public class WeixinUtil {
         // 拼装创建菜单的url
         String url = SEND_TEMPLATE_URL.replace("ACCESS_TOKEN", accessToken);
         // 将菜单对象转换成json字符串
-        String jsonMenu = JSONObject.fromObject(t).toString();
+        String jsonMenu = JSON.toJSONString(t);
         // 调用接口创建菜单
         System.out.println(jsonMenu);
         String s = doPostJson(url, jsonMenu);

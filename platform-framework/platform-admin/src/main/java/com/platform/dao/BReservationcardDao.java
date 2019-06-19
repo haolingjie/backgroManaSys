@@ -15,4 +15,6 @@ public interface BReservationcardDao extends BaseDao<BReservationcardEntity> {
     void saveList(List<BReservationcardEntity> cardList);
 
     void updateByCardCode(BReservationcardEntity entity);
+
+    List<BReservationcardEntity> queryByEntity(BReservationcardEntity entity);
 }

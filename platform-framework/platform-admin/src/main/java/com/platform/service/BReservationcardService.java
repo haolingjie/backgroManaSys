@@ -77,4 +77,5 @@ public interface BReservationcardService {
 
     void updateByCardCode(BReservationcardEntity entity);
 
+    List<BReservationcardEntity> queryByEntity(BReservationcardEntity entity);
 }

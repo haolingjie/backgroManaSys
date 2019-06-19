@@ -1,11 +1,9 @@
 $(function () {
     $("#jqGrid").Grid({
-        url: '../breservationcard/uploadlist',
+        url: '../breservationcard/uploadWeiXinSendMessageList',
         colModel: [
 			{label: 'id', name: 'id', index: 'id', key: true, hidden: true},
 			{label: '卡号', name: 'cardcode', index: 'cardCode', width: 80},
-			{label: '密码', name: 'password', index: 'passWord', width: 80},
-			{label: '公司代码', name: 'comcode', index: 'comCode', width: 80},
 			{label: '用户名称', name: 'username', index: 'userName', width: 80},
 			{label: '性别', name: 'sex', index: 'sex', width: 80},
 			{label: '身份证号', name: 'identitycard', index: 'identityCard', width: 80},
@@ -13,17 +11,10 @@ $(function () {
 			{label: '体检机构', name: 'medicalcode', index: 'medicalCode', width: 80},
 			{label: '体检日期', name: 'medicaldate', index: 'medicalDate', width: 80},
 			{label: '医疗卡状态 0：未激活，1：已激活，2已预购，3已到检，4：已过期', name: 'cardstatus', index: 'cardStatus', width: 80},
-			{label: '寄送地址', name: 'sendaddress', index: 'sendAddress', width: 80},
-			{label: '信息编辑标识', name: 'modifyFlag', index: 'modifyFlag', width: 80},
-			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80, formatter: function (value) {
-					return transDate(value);}},
-			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80, formatter: function (value) {
-					return transDate(value);}},],
-		rowList: [9999999],
-		rowNum: 9999999,
+
     });
 	new AjaxUpload('#upload', {
-		action: '../breservationcard/upload',
+		action: '../breservationcard/uploadWeiXinSendMessage',
 		name: 'file',
 		autoSubmit: true,
 		responseType: "json",
@@ -57,6 +48,7 @@ let vm = new Vue({
 		q: {
 		    name: '',
 			modifyFlag:'',
+			messageFlag:'',
 		}
 	},
 	methods: {
@@ -102,6 +94,26 @@ let vm = new Vue({
 			var obj=$("#jqGrid").jqGrid("getRowData");
 			var data={cardInfo : obj,modifyFlag : vm.q.modifyFlag};
 			let url = "../breservationcard/saveCardInfo";
+			Ajax.request({
+				url: url,
+				params: JSON.stringify(data),
+				type: "POST",
+				contentType: "application/json",
+				successCallback: function (r) {
+					alert('操作成功', function (index) {
+						vm.reload();
+					});
+				}
+			});
+		},
+		sendMessage: function (event) {
+			if(vm.q.messageFlag == null || $.trim(vm.q.messageFlag) == ""){
+				alert('请选择微信公众号消息推送标识');
+				return;
+			}
+			var obj=$("#jqGrid").jqGrid("getRowData");
+			var data={cardInfo : obj,messageFlag : vm.q.messageFlag};
+			let url = "../breservationcard/sendWeiXinMessage";
 			Ajax.request({
 				url: url,
 				params: JSON.stringify(data),

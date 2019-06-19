@@ -14,8 +14,8 @@ import net.sf.json.JSONObject;
 
 public class WeiXinUtil {
     //从微信后台拿到APPID和APPSECRET 并封装为常量
-    private static final String APPID = "wx7cefa4f6fbac3f7b";
-    private static final String APPSECRET = "98aa93ee05f6b2cbb8d0d77507c95c7f";
+    private static final String APPID = "wx0876548ed23bebbf";
+    private static final String APPSECRET = "7cc8ae5601998636b79fe483e4993a08";
     private static final String ACCESS_TOKEN_URL = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
     private static Date currentDate=new Date();
     private static AccessToken token = new AccessToken();

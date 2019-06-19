@@ -99,7 +99,7 @@
 			AND cardstatus=#{cardstatus}
 		</if>
 	</select>
-	 
+
 	<insert id="save" parameterType="com.platform.entity.BReservationcardEntity">
 		insert into b_reservationcard(
 			`id`,
@@ -242,5 +242,33 @@
 			#{id}
 		</foreach>
 	</delete>
+
+	<select id="queryByEntity" resultType="com.platform.entity.BReservationcardEntity">
+		select
+		`id`,
+		`cardCode`,
+		`passWord`,
+		`comCode`,
+		`userName`,
+		`sex`,
+		`identityCard`,
+		`phobeNumber`,
+		`medicalCode`,
+		`medicalDate`,
+		`cardStatus`,
+		`sendAddress`,
+		`setMeal`,
+		`endDate`,
+		`startDate`,
+		`modifyFlag`,
+		`insertTime`,
+		`operateTime`
+		from b_reservationcard
+		WHERE 1=1
+		<if test="cardcode != null and cardcode.trim() != ''">
+			AND cardcode =#{cardcode}
+		</if>
+
+	</select>
 
 </mapper>

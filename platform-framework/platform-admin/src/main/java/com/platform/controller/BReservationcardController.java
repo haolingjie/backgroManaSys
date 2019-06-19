@@ -7,6 +7,8 @@ import com.platform.entity.UDataRuleEntity;
 import com.platform.entity.UDictGroupEntity;
 import com.platform.service.BReservationcardService;
 import com.platform.service.UDataRuleService;
+import com.platform.service.WeiChatSendMessageService;
+import com.platform.util.wechat.template.WeixinUtil;
 import com.platform.utils.PageUtils;
 import com.platform.utils.PassWordCreateUtil;
 import com.platform.utils.Query;
@@ -37,8 +39,11 @@ public class BReservationcardController {
     private BReservationcardService bReservationcardService;
     @Autowired
     private UDataRuleService utilDataRuleService;
+    @Autowired
+    private com.platform.service.WeiChatSendMessageService weiChatSendMessageService;
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static ArrayList<BReservationcardEntity> bReservationcardEntities = new ArrayList<>();
+    private static ArrayList<BReservationcardEntity> sendMessageEntities = new ArrayList<>();
 
     /**
      * 查看列表
@@ -223,6 +228,60 @@ public class BReservationcardController {
             }
         }
         bReservationcardService.saveList(cardEntities);
+        return R.ok();
+    }
+
+
+    @RequestMapping("/uploadWeiXinSendMessage")
+    @ResponseBody
+    public R uploadWeiXinSendMessage(@RequestParam("file") MultipartFile file) {
+        List<String[]> excelData = ExcelImport.getExcelData(file);
+//        ArrayList<BReservationcardEntity> bReservationcardEntities = new ArrayList<>();
+        sendMessageEntities.clear();
+        if(excelData != null && excelData.size()>1){
+            excelData.remove(0);
+            for(String[] data :excelData){
+                if(data != null && data.length>0){
+                    BReservationcardEntity bReservationcardEntity = new BReservationcardEntity();
+                    if(data.length>0) {
+                        bReservationcardEntity.setCardcode(data[0]);
+                    }
+
+                    sendMessageEntities.add(bReservationcardEntity);
+                }
+            }
+        }
+//        bReservationcardService.saveList(bReservationcardEntities);
+//       PageUtils pageUtil = new PageUtils(bReservationcardEntities, bReservationcardEntities.size(), bReservationcardEntities.size(), 1);
+        return R.ok();
+    }
+
+    @RequestMapping("/uploadWeiXinSendMessageList")
+    @ResponseBody
+    public R uploadWeiXinSendMessageList() {
+        ArrayList<BReservationcardEntity> cardEntities = new ArrayList<>();
+        cardEntities.addAll(sendMessageEntities);
+        sendMessageEntities.clear();
+        PageUtils pageUtil = new PageUtils(cardEntities, cardEntities.size(), cardEntities.size(), 1);
+        return R.ok().put("page", pageUtil);
+    }
+
+    @RequestMapping("/sendWeiXinMessage")
+    @ResponseBody
+    public R sendWeiXinMessage(@RequestBody Map<String, Object> params) {
+        List<Map<String,Object>> cardInfo = (List)params.get("cardInfo");
+        String modifyFlag = params.get("messageFlag").toString();
+        ArrayList<BReservationcardEntity> cardEntities = new ArrayList<>();
+        if(cardInfo != null && cardInfo.size()>0){
+            for (Map<String,Object> map:cardInfo) {
+                BReservationcardEntity entity = JSON.parseObject(JSON.toJSONString(map), BReservationcardEntity.class);
+                String cardcode = entity.getCardcode();
+                List<BReservationcardEntity> bReservationcardList = bReservationcardService.queryByEntity(entity);
+                if(bReservationcardList != null && bReservationcardList.size()>0){
+                    weiChatSendMessageService.sendWeiChatMessage(bReservationcardList.get(0), WeixinUtil.SUCCESS_NOTICE);
+                }
+            }
+        }
         return R.ok();
     }
 }
