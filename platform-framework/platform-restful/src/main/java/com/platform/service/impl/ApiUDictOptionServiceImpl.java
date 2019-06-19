@@ -6,6 +6,7 @@ import com.platform.service.ApiUDictOptionService;
 import com.platform.utils.IdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +18,7 @@ import java.util.Map;
  * @date 2019-04-26 18:24:29
  */
 @Service("apiUDictOptionService")
+@Transactional
 public class ApiUDictOptionServiceImpl implements ApiUDictOptionService {
     @Autowired
     private ApiUDictOptionDao apiUDictOptionDao;

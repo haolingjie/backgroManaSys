@@ -8,6 +8,7 @@ import com.platform.utils.IdUtil;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import java.util.Map;
  * @date 2019-04-26 18:24:29
  */
 @Service("apiUMedicalecenterService")
+@Transactional
 public class ApiUMedicalecenterServiceImpl implements ApiUMedicalecenterService {
     @Autowired
     private ApiUMedicalecenterDao uMedicalecenterDao;
