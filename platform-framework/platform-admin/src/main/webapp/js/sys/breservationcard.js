@@ -49,6 +49,7 @@ $(function () {
 						return value;
 					}
 			}},
+			{label: '预约套餐类型', name: 'setMeal', index: 'setMeal', width: 80},
 			{label: '有效日期起始日期', name: 'startDate', index: 'startDate', width: 80, formatter: function (value) {
 					return transDate(value);}},
 			{label: '有效日期结束日期', name: 'endDate', index: 'endDate', width: 80, formatter: function (value) {

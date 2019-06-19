@@ -92,6 +92,9 @@
                         <i-option value="3">均不可修改</i-option>
                     </i-select>
             </Form-item>
+            <Form-item label="预约套餐类型" prop="setMeal">
+                <i-input v-model="bReservationcard.setMeal" placeholder="寄送地址"/>
+            </Form-item>
             <Form-item label="有效日期起始日期" prop="startDate">
                 <Date-picker type="date" format="yyyy-MM-dd" v-model="bReservationcard.startDate" placement="bottom-end" placeholder="有效日期起始日期" style="width: 200px"></Date-picker>
             </Form-item>

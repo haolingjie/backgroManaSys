@@ -19,6 +19,7 @@
         <result property="cardstatus" column="cardStatus"/>
         <result property="sendaddress" column="sendAddress"/>
         <result property="modifyFlag" column="modifyFlag"/>
+        <result property="setMeal" column="setMeal"/>
         <result property="startDate" column="startDate"/>
         <result property="endDate" column="endDate"/>
         <result property="inserttime" column="insertTime"/>
@@ -54,6 +55,7 @@
 			`cardStatus`,
 			`sendAddress`,
 			`modifyFlag`,
+			`setMeal`,
 			`endDate`,
 			`startDate`,
 			`insertTime`,
@@ -78,6 +80,7 @@
         `cardStatus`,
         `sendAddress`,
         `modifyFlag`,
+        `setMeal`,
         `endDate`,
         `startDate`,
         `insertTime`,
@@ -193,6 +196,7 @@
             <if test="medicaldate != null">`medicalDate` = #{medicaldate}, </if>
             <if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
             <if test="sendaddress != null">`sendAddress` = #{sendaddress}, </if>
+            <if test="setMeal != null">`setMeal` = #{setMeal}, </if>
             <if test="inserttime != null">`insertTime` = #{inserttime}, </if>
             <if test="operatetime != null">`operateTime` = #{operatetime}</if>
         </set>

@@ -63,7 +63,15 @@ public class BReservationcardEntity implements Serializable {
      * 寄送地址
      */
     private String sendaddress;
+
+    /**
+     * 信息编辑标识：0,均可编辑，1，用户信息可修改，寄送地址不可修改，2用户信息不可修改，寄送地址可修改，3均不可修改',
+     */
     private String modifyFlag;
+    /**
+     * 套餐类型
+     */
+    private String setMeal;
 
     private Date endDate;
 
@@ -244,6 +252,14 @@ public class BReservationcardEntity implements Serializable {
 
     public void setModifyFlag(String modifyFlag) {
         this.modifyFlag = modifyFlag;
+    }
+
+    public String getSetMeal() {
+        return setMeal;
+    }
+
+    public void setSetMeal(String setMeal) {
+        this.setMeal = setMeal;
     }
 
     /**

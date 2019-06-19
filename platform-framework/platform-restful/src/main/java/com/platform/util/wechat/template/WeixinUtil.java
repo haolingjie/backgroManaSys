@@ -25,8 +25,8 @@ public class WeixinUtil {
     // 获取access_token的接口地址（GET） 限200（次/天）
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
     //发送模板消息的接口
-//    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
-    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=ACCESS_TOKEN";
+    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN";
+    //    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=ACCESS_TOKEN";
 
 
     public static final String SEND_CUSTOM_URL = " https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
@@ -85,6 +85,7 @@ public class WeixinUtil {
         // 将菜单对象转换成json字符串
         String jsonMenu = JSONObject.fromObject(t).toString();
         // 调用接口创建菜单
+        System.out.println(jsonMenu);
         String s = doPostJson(url, jsonMenu);
         System.out.println(s);
         return result;

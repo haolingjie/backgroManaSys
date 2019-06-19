@@ -42,6 +42,11 @@ public class CardInfoVo implements Serializable {
      * 体检中心id
      */
     private String medicalcode;
+
+    /**
+     * 体检中心id
+     */
+    private String setMeal;
     /**
      * 体检日期
      */
@@ -128,6 +133,14 @@ public class CardInfoVo implements Serializable {
 
     public void setOpenId(String openId) {
         this.openId = openId;
+    }
+
+    public String getSetMeal() {
+        return setMeal;
+    }
+
+    public void setSetMeal(String setMeal) {
+        this.setMeal = setMeal;
     }
 
     public List<FormId> getFormIds() {

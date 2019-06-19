@@ -17,6 +17,7 @@
         <result property="cardstatus" column="cardStatus"/>
         <result property="sendaddress" column="sendAddress"/>
 		<result property="modifyFlag" column="modifyFlag"/>
+		<result property="setMeal" column="setMeal"/>
 		<result property="startDate" column="startDate"/>
 		<result property="endDate" column="endDate"/>
 		<result property="inserttime" column="insertTime"/>
@@ -38,6 +39,7 @@
 			`cardStatus`,
 			`sendAddress`,
 			`modifyFlag`,
+			`setMeal`,
 			`endDate`,
 			`startDate`,
 			`insertTime`,
@@ -60,6 +62,7 @@
     		`medicalDate`,
     		`cardStatus`,
     		`sendAddress`,
+    		`setMeal`,
 			`endDate`,
 			`startDate`,
     		`modifyFlag`,
@@ -114,6 +117,7 @@
 			`endDate`,
 			`startDate`,
 			`modifyFlag`,
+			`setMeal`,
 			`insertTime`,
 			`operateTime`)
 		values(
@@ -132,6 +136,7 @@
 			#{endDate},
 			#{startDate},
 			#{modifyFlag},
+			#{setMeal},
 			#{inserttime},
 			#{operatetime})
 	</insert>
@@ -153,6 +158,7 @@
 			`endDate`,
 			`startDate`,
 		     modifyFlag,
+			 setMeal,
 			`insertTime`,
 			`operateTime`)
 		values
@@ -172,6 +178,8 @@
 			#{card.sendaddress},
 			#{endDate},
 			#{startDate},
+			#{modifyFlag},
+			#{setMeal},
 			#{card.modifyFlag},
 			#{card.inserttime},
 			#{card.operatetime}
@@ -194,6 +202,7 @@
 			<if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
 			<if test="sendaddress != null">`sendAddress` = #{sendaddress}, </if>
 			<if test="modifyFlag != null">`modifyFlag` = #{modifyFlag}, </if>
+			<if test="setMeal != null">`setMeal` = #{setMeal}, </if>
 			<if test="endDate != null">`endDate` = #{endDate}, </if>
 			<if test="startDate != null">`startDate` = #{startDate}, </if>
 			`operateTime` = now()
@@ -215,6 +224,7 @@
 			<if test="cardstatus != null">`cardStatus` = #{cardstatus}, </if>
 			<if test="sendaddress != null">`sendAddress` = #{sendaddress}, </if>
 			<if test="modifyFlag != null">`modifyFlag` = #{modifyFlag}, </if>
+			<if test="setMeal != null">`setMeal` = #{setMeal}, </if>
 			<if test="endDate != null">`endDate` = #{endDate}, </if>
 			<if test="startDate != null">`startDate` = #{startDate}, </if>
 			`operateTime` = now()

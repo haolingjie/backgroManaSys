@@ -313,30 +313,24 @@ public class ApiWeChatController {
         template.setForm_id("f15850e88c334fdb97710b8db0724049");
         template.setTemplate_id("RzLjLQEakObCwt_aT-SqDKSEp3HwZAJWzx8UlxqHQVY");
         Map<String, TemplateData> m = new HashMap<String, TemplateData>();
-        /*TemplateData first = new TemplateData();
-        first.setColor("#000000");
+        TemplateData first = new TemplateData();
         first.setValue("您好，您有一条待确认订单。");
-//        m.put("first", first);
+        m.put("first", first);
         TemplateData keyword1 = new TemplateData();
-        keyword1.setColor("#328392");
         keyword1.setValue("OD0001");
         m.put("keyword1", keyword1);
         TemplateData keyword2 = new TemplateData();
-        keyword2.setColor("#328392");
         keyword2.setValue("预定订单");
         m.put("keyword2", keyword2);
         TemplateData keyword3 = new TemplateData();
-        keyword3.setColor("#328392");
         keyword3.setValue("大龙虾");
         m.put("keyword3", keyword3);
         TemplateData remark = new TemplateData();
-        remark.setColor("#929232");
         remark.setValue("请及时确认订单！");
         m.put("keyword4", remark);
         TemplateData remark4 = new TemplateData();
-        remark4.setColor("#929232");
         remark4.setValue("请及时确认订单！");
-        m.put("keyword5", remark);*/
+        m.put("keyword5", remark);
         template.setData(m);
         try {
             WeixinUtil.sendMessageBefore("", template, m);
@@ -402,12 +396,16 @@ public class ApiWeChatController {
                 }
 
             }
+            if(tongCardStlyleList.size() == 0){
+                tongCardStlyleList.add(option+"");
+            }
         }
         return R.ok().put("tongCardStlyleList", tongCardStlyleList);
     }
 
     @RequestMapping(value = "/checkToken")
-    public void get(HttpServletRequest request, HttpServletResponse response) throws Exception {
+    @IgnoreAuth
+    public String get(HttpServletRequest request, HttpServletResponse response) throws Exception {
         System.out.println("========WechatController========= ");
         log.info("-----来自微信的请求----");
 
@@ -423,13 +421,16 @@ public class ApiWeChatController {
         String timestamp = request.getParameter("timestamp");/// 时间戳
         String nonce = request.getParameter("nonce"); /// 随机数
         String echostr = request.getParameter("echostr"); // 随机字符串
-        PrintWriter out = response.getWriter();
+//        PrintWriter out = response.getWriter();
         if (checkSignature(signature, timestamp, nonce)) {
-            out.print(echostr);
+            return echostr;
+        }else {
+            log.info("微信token校验" + checkSignature(signature, timestamp, nonce) + "");
         }
-        out.print(token);
-        out.close();
-        out = null;
+//        out.print(token);
+//        out.close();
+//        out = null;
+        return echostr;
     }
 
       /**

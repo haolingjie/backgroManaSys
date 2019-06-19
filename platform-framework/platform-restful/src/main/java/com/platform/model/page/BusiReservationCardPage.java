@@ -76,8 +76,14 @@ public class BusiReservationCardPage implements Serializable {
      */
     private Date endDate;
 
-
+    /**
+     * 信息编辑标识：0,均可编辑，1，用户信息可修改，寄送地址不可修改，2用户信息不可修改，寄送地址可修改，3均不可修改',
+     */
     private String modifyFlag;
+    /**
+     * 套餐类型
+     */
+    private String setMeal;
     /**
      * 插入时间
      */
@@ -320,5 +326,13 @@ public class BusiReservationCardPage implements Serializable {
     public Date getOperatetime() {
         operatetime=new Date();
         return operatetime;
+    }
+
+    public String getSetMeal() {
+        return setMeal;
+    }
+
+    public void setSetMeal(String setMeal) {
+        this.setMeal = setMeal;
     }
 }
