@@ -15,6 +15,7 @@ import java.util.Date;
 public class BReservationcardEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
+
     /**
      * id
      */
@@ -28,6 +29,10 @@ public class BReservationcardEntity implements Serializable {
      */
     private String password;
     /**
+     * 微信openId
+     */
+    private String openId;
+    /**
      * 公司代码
      */
     private String comcode;
@@ -39,6 +44,11 @@ public class BReservationcardEntity implements Serializable {
      * 性别
      */
     private String sex;
+
+    /**
+     * 婚姻状态 0未婚 1已婚
+     */
+    private String maritalstatus;
     /**
      * 身份证号
      */
@@ -72,11 +82,15 @@ public class BReservationcardEntity implements Serializable {
      * 套餐类型
      */
     private String setMeal;
-
-    private Date endDate;
-
+    /**
+     * 有效期起始日期
+     */
     private Date startDate;
 
+    /**
+     *有效期结束日期
+     */
+    private Date endDate;
     /**
      * 插入时间
      */
@@ -307,5 +321,21 @@ public class BReservationcardEntity implements Serializable {
 
     public void setStartDate(Date startDate) {
         this.startDate = startDate;
+    }
+
+    public String getOpenId() {
+        return openId;
+    }
+
+    public void setOpenId(String openId) {
+        this.openId = openId;
+    }
+
+    public String getMaritalstatus() {
+        return maritalstatus;
+    }
+
+    public void setMaritalstatus(String maritalstatus) {
+        this.maritalstatus = maritalstatus;
     }
 }

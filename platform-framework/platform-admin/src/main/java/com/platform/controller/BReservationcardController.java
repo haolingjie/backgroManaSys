@@ -270,7 +270,13 @@ public class BReservationcardController {
     @ResponseBody
     public R sendWeiXinMessage(@RequestBody Map<String, Object> params) {
         List<Map<String,Object>> cardInfo = (List)params.get("cardInfo");
+        String messageFlag = params.get("messageFlag") == null ? "" : params.get("messageFlag").toString() ;
         String modifyFlag = params.get("messageFlag").toString();
+        if(StringUtils.equals(messageFlag,"0")){
+            modifyFlag=WeixinUtil.SUCCESS_NOTICE;
+        }else if(StringUtils.equals(messageFlag,"1")){
+            modifyFlag=WeixinUtil.FAIL_NOTICE;
+        }
         ArrayList<BReservationcardEntity> cardEntities = new ArrayList<>();
         if(cardInfo != null && cardInfo.size()>0){
             for (Map<String,Object> map:cardInfo) {
@@ -278,7 +284,10 @@ public class BReservationcardController {
                 String cardcode = entity.getCardcode();
                 List<BReservationcardEntity> bReservationcardList = bReservationcardService.queryByEntity(entity);
                 if(bReservationcardList != null && bReservationcardList.size()>0){
-                    weiChatSendMessageService.sendWeiChatMessage(bReservationcardList.get(0), WeixinUtil.SUCCESS_NOTICE);
+                    log.info("微信公众号发送消息开始"+JSON.toJSONString(bReservationcardList.get(0)));
+                    if(StringUtils.equals(bReservationcardList.get(0).getCardstatus(),"2")) {
+                        weiChatSendMessageService.sendWeiChatMessage(bReservationcardList.get(0), modifyFlag);
+                    }
                 }
             }
         }

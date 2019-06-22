@@ -11,7 +11,7 @@ $(function () {
 			{label: '体检机构', name: 'medicalcode', index: 'medicalCode', width: 80},
 			{label: '体检日期', name: 'medicaldate', index: 'medicalDate', width: 80},
 			{label: '医疗卡状态 0：未激活，1：已激活，2已预购，3已到检，4：已过期', name: 'cardstatus', index: 'cardStatus', width: 80},
-
+			]
     });
 	new AjaxUpload('#upload', {
 		action: '../breservationcard/uploadWeiXinSendMessage',

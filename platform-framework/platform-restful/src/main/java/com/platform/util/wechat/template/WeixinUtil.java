@@ -91,9 +91,10 @@ public class WeixinUtil {
         // 将菜单对象转换成json字符串
         String jsonMenu = JSON.toJSONString(t);
         // 调用接口创建菜单
-        System.out.println(jsonMenu);
+//        System.out.println(jsonMenu);
+        log.info("模板消息发送请求"+"|url:"+url+JSON.toJSONString(jsonMenu));
         String s = doPostJson(url, jsonMenu);
-        System.out.println(s);
+        log.info("模板消息返回|result:"+s);
         return result;
     }
 

@@ -248,6 +248,7 @@
 		`id`,
 		`cardCode`,
 		`passWord`,
+		`openId`,
 		`comCode`,
 		`userName`,
 		`sex`,

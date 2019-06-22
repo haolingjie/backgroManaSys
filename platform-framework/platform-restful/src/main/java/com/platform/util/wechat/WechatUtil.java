@@ -56,7 +56,7 @@ public class WechatUtil {
     public static final String refundqueryUrl = "https://api.mch.weixin.qq.com/pay/refundquery";
 
 
-    public static  String getOpenIdUrl="https://api.weixin.qq.com/sns/jscode2session?appid=wx7cefa4f6fbac3f7b&secret=98aa93ee05f6b2cbb8d0d77507c95c7f&grant_type=authorization_code&js_code=";
+    public static  String getOpenIdUrl="https://api.weixin.qq.com/sns/jscode2session?appid=wx0876548ed23bebbf&secret=7cc8ae5601998636b79fe483e4993a08&grant_type=authorization_code&js_code=";
     /**
      * 方法描述：微信退款逻辑
      * 创建时间：2017年4月12日  上午11:04:25
