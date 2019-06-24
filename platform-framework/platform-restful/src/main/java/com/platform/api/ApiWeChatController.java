@@ -6,6 +6,7 @@ import com.platform.annotation.IgnoreAuth;
 import com.platform.cache.J2CacheUtils;
 import com.platform.entity.*;
 import com.platform.entity.vo.CardInfoVo;
+import com.platform.entity.vo.FormId;
 import com.platform.entity.vo.MedicalCenterVO;
 import com.platform.entity.vo.WeiXinDate;
 import com.platform.model.page.BusiReservationCardPage;
@@ -58,6 +59,9 @@ public class ApiWeChatController {
 
     @Autowired
     private ApiMCardmessageService apiMCardmessageService;
+
+    @Autowired
+    private ApiBCardWechatinfoService apiBCardWechatinfoService;
     private static Logger log = LoggerFactory.getLogger(ApiWeChatController.class);
     private static String token = "112233aabcc";
 
@@ -246,6 +250,20 @@ public class ApiWeChatController {
             //2已预购
             cardPage.setCardstatus(MedicalAppUtil.CARDSTATUS_2);
             apiCardService.update(cardPage);
+            List<FormId> formIds = cardInfoVo.getFormIds();
+            if(formIds != null && formIds.size()>0){
+                for (FormId formId:
+                formIds) {
+                    BCardWechatinfoEntity bCardWechatinfoEntity = new BCardWechatinfoEntity();
+                    bCardWechatinfoEntity.setCardcode(cardInfoVo.getCardcode());
+
+                    bCardWechatinfoEntity.setFormid(formId.getFormId());
+                    bCardWechatinfoEntity.setStatus("1");
+                    Date formIdDate = new Date(Long.valueOf(formId.getExpire()));
+                    bCardWechatinfoEntity.setExpire(formIdDate);
+                    apiBCardWechatinfoService.save(bCardWechatinfoEntity);
+                }
+            }
         } catch (Exception e) {
             log.error("体检信息确认页面报错" + ExceptionUtil.getStackTrace(e));
             return R.error("确认预约失败");

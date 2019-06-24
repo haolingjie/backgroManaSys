@@ -26,16 +26,16 @@ public class WeixinUtil {
     // 获取access_token的接口地址（GET） 限200（次/天）
     public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
     //公众号发送模板消息的接口
-    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=ACCESS_TOKEN";
     //    public static final String SEND_TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/uniform_send?access_token=ACCESS_TOKEN";
 
 
     public static final String SEND_CUSTOM_URL = " https://api.weixin.qq.com/cgi-bin/message/custom/send?access_token=ACCESS_TOKEN";
 
     public static final String SUCCESS_NOTICE="successNotice";
-    public static final String SUCCESS_TEMPLATE_ID ="taYKoX8kXDJTo-IAx4tHyMI0m_GcJ5ran54Qdo59pjQ" ;
+    public static final String SUCCESS_TEMPLATE_ID ="pnkXGNhoaWPJyhUBi_wUnMA6qVelXitMwIymuSzy_d8" ;
     public static final String FAIL_NOTICE="failNotice";
-    public static final String FAIL_TEMPLATE_ID ="2LM24YCd5T7WqOvPUfXiir4gA_9PcsD5Vw1lPaKHAJc" ;
+    public static final String FAIL_TEMPLATE_ID ="pbciqhKZF1a4DFozFqkcqAiOthoErqXBfdW2PNEvuY0" ;
 
 //    /**
 //     * 获取access_token
@@ -70,11 +70,11 @@ public class WeixinUtil {
      * @param t
      * @param m
      */
-    public static void sendMessageBefore(String template_id_short, WxTemplate t, Map<String, TemplateData> m)throws Exception {
+    public static String sendMessageBefore(String template_id_short, WxTemplate t, Map<String, TemplateData> m)throws Exception {
         AccessToken token = null;
         token = WeiXinUtil.getAccessToken();
         t.setData(m);
-        int result = WeixinUtil.sendMessage(t, token.getAccess_token());
+        return WeixinUtil.sendMessage(t, token.getAccess_token());
     }
 
     /**
@@ -84,7 +84,7 @@ public class WeixinUtil {
      * @param accessToken
      * @return
      */
-    public static int sendMessage(WxTemplate t, String accessToken) {
+    public static String sendMessage(WxTemplate t, String accessToken) {
         int result = 0;
         // 拼装创建菜单的url
         String url = SEND_TEMPLATE_URL.replace("ACCESS_TOKEN", accessToken);
@@ -92,10 +92,10 @@ public class WeixinUtil {
         String jsonMenu = JSON.toJSONString(t);
         // 调用接口创建菜单
 //        System.out.println(jsonMenu);
-        log.info("模板消息发送请求"+"|url:"+url+JSON.toJSONString(jsonMenu));
+        log.info("模板消息发送请求"+"|url:"+url+jsonMenu);
         String s = doPostJson(url, jsonMenu);
         log.info("模板消息返回|result:"+s);
-        return result;
+        return s;
     }
 
     public static String doPostJson(String url, String json) {

@@ -55,7 +55,7 @@ public class WechatUtil {
      */
     public static final String refundqueryUrl = "https://api.mch.weixin.qq.com/pay/refundquery";
 
-
+    //微信小程序得到openId
     public static  String getOpenIdUrl="https://api.weixin.qq.com/sns/jscode2session?appid=wx0876548ed23bebbf&secret=7cc8ae5601998636b79fe483e4993a08&grant_type=authorization_code&js_code=";
     /**
      * 方法描述：微信退款逻辑
