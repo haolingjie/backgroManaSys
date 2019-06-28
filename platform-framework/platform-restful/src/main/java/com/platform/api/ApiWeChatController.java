@@ -173,20 +173,34 @@ public class ApiWeChatController {
             BeanUtils.copyProperties(medicalCenterVO, centerEntity);
             cardInfoVo.setMedicalcode(centerEntity.getMedicalecentercode());
             List<Integer> curCanDateList = new ArrayList<>();
+            List<Integer> curRemoveDateList = new ArrayList<>();
             List<WeiXinDate> allOrageDates = new ArrayList<WeiXinDate>();
+            List<WeiXinDate> allRemoveOrageDates = new ArrayList<WeiXinDate>();
             String currDate = DateUtils.getCurrDate();
             Calendar calendar = Calendar.getInstance();
             int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int year = calendar.get(Calendar.YEAR);
+            for(int i=1;i<=day;i++){
+                curRemoveDateList.add(i);
+                WeiXinDate weiXinDate = new WeiXinDate(year, month + 1, i);
+                allRemoveOrageDates.add(weiXinDate);
+            }
             //不开放日期排除
             String notopenDay = centerEntity.getNotopenDay();
             //日历，日期选择器
-            for (int i = 0; i < 60; i++) {
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
-                int year = calendar.get(Calendar.YEAR);
+            for (int i = 0; i < 90; i++) {
+                calendar.add(Calendar.DATE, 1);
+                day = calendar.get(Calendar.DAY_OF_MONTH);
+                year = calendar.get(Calendar.YEAR);
                 int weekday = calendar.get(Calendar.DAY_OF_WEEK);
                 int forMonth = calendar.get(Calendar.MONTH);
                 if (weekday == 1) {
-//                        curRemoveDateList.add(day);
+                    if (month == forMonth) {
+                        curRemoveDateList.add(day);
+                    }
+                    WeiXinDate weiXinDate = new WeiXinDate(year, forMonth + 1, day);
+                    allRemoveOrageDates.add(weiXinDate);
                 } else {
                     boolean isAdd = true;
                     if (StringUtils.isNotBlank(notopenDay)) {
@@ -197,9 +211,13 @@ public class ApiWeChatController {
                             notopenDayCalendar.setTime(notopenDate);
                             if (notopenDayCalendar.get(Calendar.YEAR) == year && notopenDayCalendar.get(Calendar.MONTH) == forMonth && notopenDayCalendar.get(Calendar.DAY_OF_MONTH) == day) {
                                 isAdd = false;
+                                if (month == forMonth) {
+                                    curRemoveDateList.add(day);
+                                }
+                                WeiXinDate weiXinDate = new WeiXinDate(year, forMonth + 1, day);
+                                allRemoveOrageDates.add(weiXinDate);
                                 break;
                             }
-
                         }
                     }
                     if (isAdd) {
@@ -210,7 +228,6 @@ public class ApiWeChatController {
                         allOrageDates.add(weiXinDate);
                     }
                 }
-                calendar.add(Calendar.DATE, 1);
             }
             String startDate = DateUtils.getNextDay(currDate, 1);
 //            String removeDate = DateUtils.getNextDay(currDate, 5);
@@ -223,10 +240,11 @@ public class ApiWeChatController {
 //            returnMap.put("startDate", startDate);
 //            returnMap.put("endDate", endDate);
             returnMap.put("curCanDateList", curCanDateList);
-//            returnMap.put("curRemoveDateList", curRemoveDateList);
             returnMap.put("allOrageDates", allOrageDates);
-//            returnMap.put("nextRemoveDateList", nextRemoveDateList);
+            returnMap.put("curRemoveDateList", curRemoveDateList);
+            returnMap.put("allRemoveOrageDates", allRemoveOrageDates);
 
+//            returnMap.put("nextRemoveDateList", nextRemoveDateList);
             log.info("初始化体检日期页面查询结果" + JSONObject.toJSONString(returnMap));
         } catch (Exception e) {
             log.error("初始化体检日期页面报错" + ExceptionUtil.getStackTrace(e));

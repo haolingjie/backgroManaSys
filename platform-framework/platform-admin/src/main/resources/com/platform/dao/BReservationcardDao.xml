@@ -71,7 +71,7 @@
 		from b_reservationcard
 		WHERE 1=1
 		<if test="name != null and name.trim() != ''">
-			AND cardCode LIKE concat('%',#{name},'%')
+			(AND cardCode LIKE concat('%',#{name},'%') or userName LIKE concat('%',#{name},'%') or identityCard LIKE concat('%',#{name},'%') or phobeNumber LIKE concat('%',#{name},'%'))
 		</if>
 		<if test="cardstatus != null and cardstatus.trim() != ''">
 			AND cardstatus=#{cardstatus}
@@ -93,7 +93,7 @@
 		select count(*) from b_reservationcard
 		WHERE 1=1
         <if test="name != null and name.trim() != ''">
-            AND cardCode LIKE concat('%',#{name},'%')
+			(AND cardCode LIKE concat('%',#{name},'%') or userName LIKE concat('%',#{name},'%') or identityCard LIKE concat('%',#{name},'%') or phobeNumber LIKE concat('%',#{name},'%'))
         </if>
 		<if test="cardstatus != null and cardstatus.trim() != ''">
 			AND cardstatus=#{cardstatus}
@@ -176,11 +176,10 @@
 			#{card.medicaldate},
 			#{card.cardstatus},
 			#{card.sendaddress},
-			#{endDate},
-			#{startDate},
-			#{modifyFlag},
-			#{setMeal},
+			#{card.endDate},
+			#{card.startDate},
 			#{card.modifyFlag},
+			#{card.setMeal},
 			#{card.inserttime},
 			#{card.operatetime}
 			)

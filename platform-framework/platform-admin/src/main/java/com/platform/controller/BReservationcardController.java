@@ -57,6 +57,12 @@ public class BReservationcardController {
         Query query = new Query(params);
 
         List<BReservationcardEntity> bReservationcardList = bReservationcardService.queryList(query);
+//        if(bReservationcardList != null && bReservationcardList.size()>0){
+//            for (BReservationcardEntity :entity
+//            bReservationcardList) {
+//
+//            }
+//        }
         int total = bReservationcardService.queryTotal(query);
 
         PageUtils pageUtil = new PageUtils(bReservationcardList, total, query.getLimit(), query.getPage());
@@ -213,21 +219,27 @@ public class BReservationcardController {
         List<Map<String,Object>> cardInfo = (List)params.get("cardInfo");
         String modifyFlag = params.get("modifyFlag").toString();
         ArrayList<BReservationcardEntity> cardEntities = new ArrayList<>();
-        if(cardInfo != null && cardInfo.size()>0){
-            for (Map<String,Object> map:cardInfo) {
+        if(cardInfo != null && cardInfo.size()>0) {
+            for (Map<String, Object> map : cardInfo) {
                 BReservationcardEntity entity = JSON.parseObject(JSON.toJSONString(map), BReservationcardEntity.class);
                 entity.setModifyFlag(modifyFlag);
-                String sex= StringUtils.equals(entity.getSex(), "男") ? "1" : (StringUtils.equals(entity.getSex(), "女") ? "0" : "");
+                String sex = StringUtils.equals(entity.getSex(), "男") ? "1" : (StringUtils.equals(entity.getSex(), "女") ? "0" : "");
                 entity.setSex(sex);
                 entity.setPassword(PassWordCreateUtil.createPassWord(8));
+                entity.setCardstatus("1");
                 entity.setStartDate(new Date());
                 Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.YEAR,1);
+                calendar.add(Calendar.YEAR, 1);
                 entity.setEndDate(calendar.getTime());
                 cardEntities.add(entity);
             }
+            if (cardEntities != null && cardEntities.size() == 1) {
+                bReservationcardService.save(cardEntities.get(0));
+            } else if (cardEntities != null && cardEntities.size() > 1) {
+                bReservationcardService.saveList(cardEntities);
+            }
         }
-        bReservationcardService.saveList(cardEntities);
+
         return R.ok();
     }
 

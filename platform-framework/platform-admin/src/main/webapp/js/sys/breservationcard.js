@@ -19,7 +19,8 @@ $(function () {
 			{label: '身份证号', name: 'identitycard', index: 'identityCard', width: 80},
 			{label: '手机号', name: 'phobenumber', index: 'phobeNumber', width: 80},
 			{label: '体检机构', name: 'medicalcode', index: 'medicalCode', width: 80},
-			{label: '体检日期', name: 'medicaldate', index: 'medicalDate', width: 80},
+			{label: '体检日期', name: 'medicaldate', index: 'medicalDate', width: 80, formatter: function (value) {
+					return transDate(value);}},
 			{label: '医疗卡状态', name: 'cardstatus', index: 'cardStatus', width: 80,formatter: function (value) {
 					if(value =="0"){
 						return '未激活'
