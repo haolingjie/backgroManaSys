@@ -54,6 +54,12 @@ public class UMedicalecenterController {
         return R.ok().put("page", pageUtil);
     }
 
+    @RequestMapping("/getAll")
+    @ResponseBody
+    public R getAll(@RequestParam Map<String, Object> params) {
+        List<UMedicalecenterEntity> uMedicalecenterList = uMedicalecenterService.queryList(params);
+        return R.ok().put("uMedicalecenterList", uMedicalecenterList);
+    }
     /**
      * 查看信息
      */

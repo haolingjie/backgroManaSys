@@ -187,6 +187,14 @@ public class BReservationcardController {
 //                            bReservationcardEntity.setPassword(PassWordCreateUtil.createPassWord(8));
                             uDataRuleEntity.setDatamax(datamax);
                             utilDataRuleService.update(uDataRuleEntity);
+                        }else{
+                            UDataRuleEntity uDataRuleEntity=new UDataRuleEntity();
+                            uDataRuleEntity.setRuleoption(entity.getRuleoption());
+                            uDataRuleEntity.setRulecode("cardCode");
+                            uDataRuleEntity.setRulename("医疗卡账号");
+                            uDataRuleEntity.setDatamax(10000000L);
+                            bReservationcardEntity.setCardcode(entity.getRuleoption()+uDataRuleEntity.getDatamax());
+                            utilDataRuleService.save(uDataRuleEntity);
                         }
                     }
                     if(data.length>1) {

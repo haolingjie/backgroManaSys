@@ -236,14 +236,12 @@ public class ApiWeChatController {
             String endDate = DateUtils.getNextDay(currDate, 14);
             returnMap.put("cardInfoVo", cardInfoResult);
             returnMap.put("medicalCenterVO", medicalCenterVO);
-
 //            returnMap.put("startDate", startDate);
 //            returnMap.put("endDate", endDate);
             returnMap.put("curCanDateList", curCanDateList);
             returnMap.put("allOrageDates", allOrageDates);
             returnMap.put("curRemoveDateList", curRemoveDateList);
             returnMap.put("allRemoveOrageDates", allRemoveOrageDates);
-
 //            returnMap.put("nextRemoveDateList", nextRemoveDateList);
             log.info("初始化体检日期页面查询结果" + JSONObject.toJSONString(returnMap));
         } catch (Exception e) {
@@ -408,7 +406,7 @@ public class ApiWeChatController {
         List<String> tongCardStlyleList = new ArrayList<>();
         String cardcode = cardInfoVo.getCardcode();
         if (StringUtils.isNotBlank(cardcode)) {
-            char option = cardcode.charAt(0);
+            String option = cardcode.substring(0, cardcode.length() - 8);
             HashMap<String, Object> paramMap = new HashMap<>();
             paramMap.put("groupCode", "cardCode");
             paramMap.put("categoryCode", option + "");

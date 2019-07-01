@@ -1,5 +1,7 @@
 package com.platform.entity;
 
+import com.platform.utils.IdUtil;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,7 +10,7 @@ import java.util.Date;
  * 表名 u_dict_group
  *
  * @author lipengjun
- * @date 2019-04-26 18:24:29
+ * @date 2019-07-01 15:17:01
  */
 public class UDictGroupEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -46,9 +48,6 @@ public class UDictGroupEntity implements Serializable {
      */
     private Date operatetime;
 
-    /**
-     * 设置：id
-     */
     public void setId(String id) {
         this.id = id;
     }
@@ -57,6 +56,9 @@ public class UDictGroupEntity implements Serializable {
      * 获取：id
      */
     public String getId() {
+        if(id == null){
+            id= IdUtil.createIdbyUUID();
+        }
         return id;
     }
     /**
@@ -135,6 +137,9 @@ public class UDictGroupEntity implements Serializable {
      * 获取：插入时间
      */
     public Date getInserttime() {
+        if(inserttime == null){
+            inserttime=new Date();
+        }
         return inserttime;
     }
     /**
@@ -148,6 +153,7 @@ public class UDictGroupEntity implements Serializable {
      * 获取：更新时间
      */
     public Date getOperatetime() {
+        operatetime=new Date();
         return operatetime;
     }
 }

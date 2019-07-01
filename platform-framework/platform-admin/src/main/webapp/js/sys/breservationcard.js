@@ -18,9 +18,11 @@ $(function () {
 			}},
 			{label: '身份证号', name: 'identitycard', index: 'identityCard', width: 80},
 			{label: '手机号', name: 'phobenumber', index: 'phobeNumber', width: 80},
-			{label: '体检机构', name: 'medicalcode', index: 'medicalCode', width: 80},
+			{label: '体检机构', name: 'medicalcode', index: 'medicalCode', width: 80, formatter: function (value) {
+			return getMedicalNameById(value);
+			}},
 			{label: '体检日期', name: 'medicaldate', index: 'medicalDate', width: 80, formatter: function (value) {
-					return transDate(value);}},
+					return transDate(value,"yyyy-MM-dd");}},
 			{label: '医疗卡状态', name: 'cardstatus', index: 'cardStatus', width: 80,formatter: function (value) {
 					if(value =="0"){
 						return '未激活'
@@ -60,7 +62,32 @@ $(function () {
 			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80, formatter: function (value) {
 					return transDate(value);}},],
     });
+    /*Ajax.request({
+        url: "../umedicalecenter/getAll",
+        async: true,
+        successCallback: function (r) {
+            if(r.uMedicalecenterList) {
+                allmedicalCenterList = r.uMedicalecenterList;
+            }
+        }
+    });*/
 });
+// var allmedicalCenterList;
+function getMedicalNameById(id){
+    var medicalName="";
+    if(id != null && id !=''){
+        Ajax.request({
+            url: "../umedicalecenter/info/"+id,
+            async: false,
+            successCallback: function (r) {
+                if(r.uMedicalecenter) {
+                    medicalName = r.uMedicalecenter.medicalecentername;
+                }
+            }
+        });
+    }
+    return medicalName;
+}
 
 let vm = new Vue({
 	el: '#rrapp',
@@ -68,6 +95,7 @@ let vm = new Vue({
         showList: true,
         title: null,
 		bReservationcard: {},
+        medicalCenterList: [],
 		ruleValidate: {
 			name: [
 				{required: true, message: '名称不能为空', trigger: 'blur'}
@@ -163,6 +191,25 @@ let vm = new Vue({
         },
         handleReset: function (name) {
             handleResetForm(this, name);
-        }
+        },remoteMethod: function (query) {
+            if (query !== '') {
+                this.loading = true;
+                $.ajax({
+                    url: "../umedicalecenter/getAll",
+                    data:{
+                        name:query
+                    },
+                    type: "POST",
+                    dateType:'json',
+                    success:function(r) {
+                        if(r.uMedicalecenterList) {
+                            vm.medicalCenterList = r.uMedicalecenterList;
+                        }
+                    }
+                });
+            } else {
+                this.medicalCenterList = [];
+            }
+        },
 	}
 });

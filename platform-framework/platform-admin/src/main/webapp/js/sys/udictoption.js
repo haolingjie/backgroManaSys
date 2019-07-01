@@ -5,13 +5,34 @@ $(function () {
 			{label: 'id', name: 'id', index: 'id', key: true, hidden: true},
 			{label: '明细代码', name: 'optioncode', index: 'optionCode', width: 80},
 			{label: '明细名称', name: 'optionname', index: 'optionName', width: 80},
+			{label: '明细所属组', name: 'groupCodeId', index: 'groupCodeId', width: 80, formatter: function (value) {
+					return getGroupNameById(value);
+			}},
 			{label: '明细主要说明', name: 'optionimport', index: 'optionImport', width: 80},
 			{label: '明细描述', name: 'optiondescribe', index: 'optionDescribe', width: 80},
 			{label: '有效值', name: 'validstatus', index: 'validStatus', width: 80},
-			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80},
-			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80}]
-    });
+			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80, formatter: function (value) {
+					return transDate(value);}},
+			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80, formatter: function (value) {
+					return transDate(value);}},]
+	});
 });
+
+function getGroupNameById(id){
+	var medicalName="";
+	if(id != null && id !=''){
+		Ajax.request({
+			url: "../udictgroup/info/"+id,
+			async: false,
+			successCallback: function (r) {
+				if(r.uDictGroup) {
+					medicalName = r.uDictGroup.categoryname;
+				}
+			}
+		});
+	}
+	return medicalName;
+}
 
 let vm = new Vue({
 	el: '#rrapp',
@@ -19,6 +40,7 @@ let vm = new Vue({
         showList: true,
         title: null,
 		uDictOption: {},
+		udictgroupList:[],
 		ruleValidate: {
 			name: [
 				{required: true, message: '名称不能为空', trigger: 'blur'}
@@ -112,6 +134,26 @@ let vm = new Vue({
         },
         handleReset: function (name) {
             handleResetForm(this, name);
-        }
+        },
+		remoteMethod: function (query) {
+			if (query !== '') {
+				this.loading = true;
+				$.ajax({
+					url: "../udictgroup/queryAll",
+					data:{
+						name:query
+					},
+					type: "POST",
+					dateType:'json',
+					success:function(r) {
+						if(r.list) {
+							vm.udictgroupList = r.list;
+						}
+					}
+				});
+			} else {
+				vm.udictgroupList = [];
+			}
+		},
 	}
 });

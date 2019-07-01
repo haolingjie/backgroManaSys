@@ -39,6 +39,12 @@
             <Form-item label="明细名称" prop="optionname">
                 <i-input v-model="uDictOption.optionname" placeholder="明细名称"/>
             </Form-item>
+            <Form-item label="明细所属组" prop="groupCodeId">
+                <i-select :model.sync="uDictOption.groupCodeId" filterable  remote
+                          :remote-method="remoteMethod" clearable style="width:200px" placeholder="明细所属组">
+                    <i-option v-for="item in udictgroupList" :value="item.id">{{ item.categoryname }}</i-option>
+                </i-select>
+            </Form-item>
             <Form-item label="明细主要说明" prop="optionimport">
                 <i-input v-model="uDictOption.optionimport" placeholder="明细主要说明"/>
             </Form-item>

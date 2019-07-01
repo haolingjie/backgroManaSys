@@ -1,5 +1,7 @@
 package com.platform.entity;
 
+import com.platform.utils.IdUtil;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -8,7 +10,7 @@ import java.util.Date;
  * 表名 u_dict_option
  *
  * @author lipengjun
- * @date 2019-04-26 18:24:29
+ * @date 2019-07-01 15:17:01
  */
 public class UDictOptionEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -25,6 +27,10 @@ public class UDictOptionEntity implements Serializable {
      * 明细名称
      */
     private String optionname;
+    /**
+     * 组id
+     */
+    private String groupCodeId;
     /**
      * 明细主要说明
      */
@@ -46,9 +52,6 @@ public class UDictOptionEntity implements Serializable {
      */
     private Date operatetime;
 
-    /**
-     * 设置：id
-     */
     public void setId(String id) {
         this.id = id;
     }
@@ -57,6 +60,9 @@ public class UDictOptionEntity implements Serializable {
      * 获取：id
      */
     public String getId() {
+        if(id == null){
+            id= IdUtil.createIdbyUUID();
+        }
         return id;
     }
     /**
@@ -85,6 +91,15 @@ public class UDictOptionEntity implements Serializable {
     public String getOptionname() {
         return optionname;
     }
+
+    public String getGroupCodeId() {
+        return groupCodeId;
+    }
+
+    public void setGroupCodeId(String groupCodeId) {
+        this.groupCodeId = groupCodeId;
+    }
+
     /**
      * 设置：明细主要说明
      */
@@ -135,6 +150,9 @@ public class UDictOptionEntity implements Serializable {
      * 获取：插入时间
      */
     public Date getInserttime() {
+        if(inserttime == null){
+            inserttime=new Date();
+        }
         return inserttime;
     }
     /**
@@ -148,6 +166,7 @@ public class UDictOptionEntity implements Serializable {
      * 获取：更新时间
      */
     public Date getOperatetime() {
+        operatetime=new Date();
         return operatetime;
     }
 }

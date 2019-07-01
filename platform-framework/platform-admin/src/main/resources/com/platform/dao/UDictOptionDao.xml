@@ -7,6 +7,7 @@
         <result property="id" column="id"/>
         <result property="optioncode" column="optionCode"/>
         <result property="optionname" column="optionName"/>
+        <result property="groupCodeId" column="groupCodeId"/>
         <result property="optionimport" column="optionImport"/>
         <result property="optiondescribe" column="optionDescribe"/>
         <result property="validstatus" column="validStatus"/>
@@ -19,6 +20,7 @@
 			`id`,
 			`optionCode`,
 			`optionName`,
+			`groupCodeId`,
 			`optionImport`,
 			`optionDescribe`,
 			`validStatus`,
@@ -33,6 +35,7 @@
     		`id`,
     		`optionCode`,
     		`optionName`,
+    		`groupCodeId`,
     		`optionImport`,
     		`optionDescribe`,
     		`validStatus`,
@@ -41,7 +44,7 @@
 		from u_dict_option
 		WHERE 1=1
 		<if test="name != null and name.trim() != ''">
-			AND name LIKE concat('%',#{name},'%')
+			AND optionName LIKE concat('%',#{name},'%')
 		</if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
@@ -60,7 +63,7 @@
 		select count(*) from u_dict_option
 		WHERE 1=1
         <if test="name != null and name.trim() != ''">
-            AND name LIKE concat('%',#{name},'%')
+            AND optionName LIKE concat('%',#{name},'%')
         </if>
 	</select>
 	 
@@ -69,6 +72,7 @@
 			`id`,
 			`optionCode`,
 			`optionName`,
+			`groupCodeId`,
 			`optionImport`,
 			`optionDescribe`,
 			`validStatus`,
@@ -78,6 +82,7 @@
 			#{id},
 			#{optioncode},
 			#{optionname},
+			#{groupCodeId},
 			#{optionimport},
 			#{optiondescribe},
 			#{validstatus},
@@ -90,6 +95,7 @@
 		<set>
 			<if test="optioncode != null">`optionCode` = #{optioncode}, </if>
 			<if test="optionname != null">`optionName` = #{optionname}, </if>
+			<if test="groupCodeId != null">`groupCodeId` = #{groupCodeId}, </if>
 			<if test="optionimport != null">`optionImport` = #{optionimport}, </if>
 			<if test="optiondescribe != null">`optionDescribe` = #{optiondescribe}, </if>
 			<if test="validstatus != null">`validStatus` = #{validstatus}, </if>

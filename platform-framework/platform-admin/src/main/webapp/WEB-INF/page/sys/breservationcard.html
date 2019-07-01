@@ -67,7 +67,10 @@
                 <i-input v-model="bReservationcard.phobenumber" placeholder="手机号"/>
             </Form-item>
             <Form-item label="体检机构" prop="medicalcode">
-                <i-input v-model="bReservationcard.medicalcode" placeholder="体检机构"/>
+                <i-select :model.sync="bReservationcard.medicalcode" filterable  remote
+                          :remote-method="remoteMethod" clearable style="width:200px" placeholder="体检机构">
+                    <i-option v-for="item in medicalCenterList" :value="item.id">{{ item.medicalecentername }}</i-option>
+                </i-select>
             </Form-item>
             <Form-item label="体检日期" prop="medicaldate">
                 <i-input v-model="bReservationcard.medicaldate" placeholder="体检日期"/>
