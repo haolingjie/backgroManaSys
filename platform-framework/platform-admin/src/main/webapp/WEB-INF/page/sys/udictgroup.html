@@ -45,15 +45,19 @@
             <Form-item label="类型名称" prop="categoryname">
                 <i-input v-model="uDictGroup.categoryname" placeholder="类型名称"/>
             </Form-item>
+
             <Form-item label="有效值" prop="validstatus">
-                <i-input v-model="uDictGroup.validstatus" placeholder="有效值"/>
+                <i-select v-model="uDictGroup.validstatus"  placeholder="有效值">
+                    <i-option value="0">无效</i-option>
+                    <i-option value="1">有效</i-option>
+                </i-select>
             </Form-item>
-            <Form-item label="插入时间" prop="inserttime">
+            <!--<Form-item label="插入时间" prop="inserttime">
                 <i-input v-model="uDictGroup.inserttime" placeholder="插入时间"/>
             </Form-item>
             <Form-item label="更新时间" prop="operatetime">
                 <i-input v-model="uDictGroup.operatetime" placeholder="更新时间"/>
-            </Form-item>
+            </Form-item>-->
             <Form-item>
                 <i-button type="primary" @click="handleSubmit('formValidate')">提交</i-button>
                 <i-button type="warning" @click="reload" style="margin-left: 8px"/>返回</i-button>

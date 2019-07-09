@@ -14,14 +14,12 @@ public class PassWordCreateUtil {
     }
     public static String createPassWord(int random,int len){
         Random rd = new Random(random);
-        final int maxNum = 62;
+        final int maxNum = 36;
         StringBuffer sb = new StringBuffer();
         int rdGet;//取得随机数
         char[] str = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k',
                 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w',
-                'x', 'y', 'z', 'A','B','C','D','E','F','G','H','I','J','K',
-                'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-                'X', 'Y' ,'Z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+                'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         int count=0;
         while(count < len){
             rdGet = Math.abs(rd.nextInt(maxNum));//生成的数最大为62-1

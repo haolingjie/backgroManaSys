@@ -410,11 +410,14 @@ public class ApiWeChatController {
             HashMap<String, Object> paramMap = new HashMap<>();
             paramMap.put("groupCode", "cardCode");
             paramMap.put("categoryCode", option + "");
+            paramMap.put("validstatus", "1");
             List<UDictGroupEntity> uDictGroupEntities = apiUDictGroupService.queryList(paramMap);
             if (uDictGroupEntities != null && uDictGroupEntities.size() > 0) {
                 UDictGroupEntity uDictGroupEntity = uDictGroupEntities.get(0);
                 paramMap.clear();
                 paramMap.put("groupCodeId", uDictGroupEntity.getId());
+                paramMap.put("optioncode", "tongCard");
+                paramMap.put("validstatus", "1");
                 List<UDictOptionEntity> uDictOptionEntities = apiUDictOptionService.queryList(paramMap);
                 if (uDictOptionEntities != null && uDictOptionEntities.size() > 0) {
                     for (UDictOptionEntity entity : uDictOptionEntities) {
@@ -425,10 +428,8 @@ public class ApiWeChatController {
                                 tongCardStlyleList = Arrays.asList(tongCardStlyleArr);
                             }
                         }
-
                     }
                 }
-
             }
             if(tongCardStlyleList.size() == 0){
                 tongCardStlyleList.add(option+"");

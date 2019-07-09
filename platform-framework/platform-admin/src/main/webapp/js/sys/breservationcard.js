@@ -211,5 +211,8 @@ let vm = new Vue({
                 this.medicalCenterList = [];
             }
         },
+		getMedicalCode: function (val) {
+			vm.bReservationcard.medicalcode=val;
+		},
 	}
 });

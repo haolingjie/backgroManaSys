@@ -10,7 +10,15 @@ $(function () {
 			}},
 			{label: '明细主要说明', name: 'optionimport', index: 'optionImport', width: 80},
 			{label: '明细描述', name: 'optiondescribe', index: 'optionDescribe', width: 80},
-			{label: '有效值', name: 'validstatus', index: 'validStatus', width: 80},
+			{label: '有效值', name: 'validstatus', index: 'validStatus', width: 80, formatter: function (value) {
+                   if(value == '0'){
+                       return "无效"
+                   }else if(value == "1"){
+                       return "有效"
+                   }else{
+                       return value;
+                   }
+                }},
 			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80, formatter: function (value) {
 					return transDate(value);}},
 			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80, formatter: function (value) {
@@ -40,6 +48,8 @@ let vm = new Vue({
         showList: true,
         title: null,
 		uDictOption: {},
+		selectUdictgroupListById: [],
+		udictgroupListById: [],
 		udictgroupList:[],
 		ruleValidate: {
 			name: [
@@ -154,6 +164,21 @@ let vm = new Vue({
 			} else {
 				vm.udictgroupList = [];
 			}
+		},getGroupCodeId: function (val) {
+			vm.uDictOption.groupCodeId=val;
+			$.ajax({
+				url: "../udictgroup/queryAllCodeById/"+val,
+				async: false,
+				type: "GET",
+				success: function (r) {
+					if(r.list) {
+						vm.udictgroupListById = r.list;
+					}
+				}
+			});
 		},
+		getOptionimport: function (val) {
+			vm.uDictOption.optionimport=val;
+		}
 	}
 });

@@ -7,7 +7,15 @@ $(function () {
 			{label: '组名称', name: 'groupname', index: 'groupName', width: 80},
 			{label: '类型代码', name: 'categorycode', index: 'categoryCode', width: 80},
 			{label: '类型名称', name: 'categoryname', index: 'categoryName', width: 80},
-			{label: '有效值', name: 'validstatus', index: 'validStatus', width: 80},
+			{label: '有效值', name: 'validstatus', index: 'validStatus', width: 80, formatter: function (value) {
+					if(value == '0'){
+						return "无效"
+					}else if(value == "1"){
+						return "有效"
+					}else{
+						return value;
+					}
+			}},
 			{label: '插入时间', name: 'inserttime', index: 'insertTime', width: 80},
 			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80}]
     });

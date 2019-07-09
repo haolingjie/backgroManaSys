@@ -1,7 +1,9 @@
 package com.platform.controller;
 
 import com.platform.entity.UDictGroupEntity;
+import com.platform.entity.UDictOptionEntity;
 import com.platform.service.UDictGroupService;
+import com.platform.service.UDictOptionService;
 import com.platform.utils.PageUtils;
 import com.platform.utils.Query;
 import com.platform.utils.R;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -28,7 +32,8 @@ import java.util.Map;
 public class UDictGroupController {
     @Autowired
     private UDictGroupService uDictGroupService;
-
+    @Autowired
+    private UDictOptionService uDictOptionService;
     /**
      * 查看列表
      */
@@ -104,6 +109,38 @@ public class UDictGroupController {
 
         List<UDictGroupEntity> list = uDictGroupService.queryList(params);
 
+        return R.ok().put("list", list);
+    }
+
+    /**
+     * 查看信息
+     */
+    @RequestMapping("/queryAllCodeById/{id}")
+    @ResponseBody
+    public R queryAllCodeById(@PathVariable("id") String id) {
+        UDictGroupEntity uDictGroup = uDictGroupService.queryObject(id);
+        String groupcode = uDictGroup.getGroupcode();
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("groupcode",groupcode);
+        List<UDictGroupEntity> list = uDictGroupService.queryList(params);
+        if(list != null && list.size()>0){
+            Iterator<UDictGroupEntity> iterator = list.iterator();
+            while(iterator.hasNext()) {
+                UDictGroupEntity entity = iterator.next();
+                params = new HashMap<String, Object>();
+                params.put("groupCodeId", entity.getId());
+                List<UDictOptionEntity> uDictOptionEntities = uDictOptionService.queryList(params);
+                if(uDictOptionEntities != null && uDictOptionEntities.size()>0){
+                    for (UDictOptionEntity element:
+                            uDictOptionEntities) {
+                        if("tongCard".equals(element.getOptioncode())){
+                            iterator.remove();
+                            continue;
+                        }
+                    }
+                }
+            }
+        }
         return R.ok().put("list", list);
     }
 }

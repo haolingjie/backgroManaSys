@@ -84,6 +84,7 @@ public class WeiChatSendMessageServiceImpl implements WeiChatSendMessageService 
             template.setData(m);
 
         }else if(StringUtils.equals(sendMessageFlag, WeixinUtil.FAIL_NOTICE)){
+            template.setTemplate_id(WeixinUtil.FAIL_TEMPLATE_ID);
             TemplateData keyword1 = new TemplateData();
             keyword1.setValue(entity.getUsername());
             m.put("keyword1", keyword1);
@@ -94,14 +95,15 @@ public class WeiChatSendMessageServiceImpl implements WeiChatSendMessageService 
             TemplateData keyword4 = new TemplateData();
             //体检医院 地点
             if(centerEntity != null) {
-                keyword3.setValue("该体检机构临时不开放");
+                keyword3.setValue("预约失败");
 //                keyword4.setValue(centerEntity.getMedicalecenteraddress());
             }else{
-                keyword3.setValue("该体检机构临时不开放");
+                keyword3.setValue("预约失败");
 //                keyword4.setValue("");
             }
             m.put("keyword3", keyword3);
 //            m.put("keyword4", keyword4);
+            template.setData(m);
         }
         log.info("模板消息发送"+JSON.toJSONString(template));
         try {

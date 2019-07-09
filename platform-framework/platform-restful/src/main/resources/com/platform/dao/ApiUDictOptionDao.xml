@@ -46,6 +46,12 @@
 		<if test="optionCode != null and optionCode.trim() != ''">
 			AND optionCode =#{optionCode}
 		</if>
+		<if test="optioncode != null and optioncode.trim() != ''">
+			AND optioncode =#{optioncode}
+		</if>
+		<if test="validstatus != null and validstatus.trim() != ''">
+			AND validstatus =#{validstatus}
+		</if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
