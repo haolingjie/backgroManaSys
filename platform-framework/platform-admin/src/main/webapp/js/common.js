@@ -182,11 +182,11 @@ function transDate(date, fmt) {
             try {
                 return new Date(date.replace('-', '/').replace('-', '/')).dateFormat(fmt);
             } catch (e) {
-                return '-';
+                return '';
             }
         }
     } else {
-        return '-';
+        return '';
     }
 };
 

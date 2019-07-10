@@ -76,6 +76,12 @@
 		<if test="cardstatus != null and cardstatus.trim() != ''">
 			AND cardstatus=#{cardstatus}
 		</if>
+		<if test="daterange0 != null">
+			AND inserttime &gt;= #{daterange0,jdbcType=TIMESTAMP}
+		</if>
+		<if test="daterange1 != null">
+			AND inserttime &lt;= #{daterange1,jdbcType=TIMESTAMP}
+		</if>
         <choose>
             <when test="sidx != null and sidx.trim() != ''">
                 order by ${sidx} ${order}
@@ -97,6 +103,12 @@
         </if>
 		<if test="cardstatus != null and cardstatus.trim() != ''">
 			AND cardstatus=#{cardstatus}
+		</if>
+		 <if test="daterange0 != null">
+			AND inserttime &gt;= #{daterange0,jdbcType=TIMESTAMP}
+		</if>
+		<if test="daterange1 != null">
+			AND inserttime &lt;= #{daterange1,jdbcType=TIMESTAMP}
 		</if>
 	</select>
 

@@ -5,14 +5,13 @@ import com.google.gson.JsonObject;
 import com.platform.entity.BReservationcardEntity;
 import com.platform.entity.UDataRuleEntity;
 import com.platform.entity.UDictGroupEntity;
+import com.platform.page.BReservationCardPage;
 import com.platform.service.BReservationcardService;
 import com.platform.service.UDataRuleService;
 import com.platform.service.WeiChatSendMessageService;
 import com.platform.util.wechat.template.WeixinUtil;
-import com.platform.utils.PageUtils;
-import com.platform.utils.PassWordCreateUtil;
-import com.platform.utils.Query;
-import com.platform.utils.R;
+import com.platform.utils.*;
+import com.platform.utils.excel.ExcelExport;
 import com.platform.utils.excel.ExcelImport;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -23,6 +22,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -43,6 +45,7 @@ public class BReservationcardController {
     private com.platform.service.WeiChatSendMessageService weiChatSendMessageService;
     private Logger log = LoggerFactory.getLogger(this.getClass());
     private static ArrayList<BReservationcardEntity> bReservationcardEntities = new ArrayList<>();
+    private static ArrayList<BReservationCardPage> BReservationCardPageList = new ArrayList<>();
     private static ArrayList<BReservationcardEntity> sendMessageEntities = new ArrayList<>();
 
     /**
@@ -52,7 +55,18 @@ public class BReservationcardController {
     @RequiresPermissions("breservationcard:list")
     @ResponseBody
     public R list(@RequestParam Map<String, Object> params) {
-
+//        params.put("daterange0",null);
+//        params.put("daterange1",null);
+        if(params.get("daterange[0]") != null){
+            Object date = params.get("daterange[0]");
+            Date daterange0=new Date(date.toString());
+            params.put("daterange0",daterange0);
+        }
+        if(params.get("daterange[1]") != null){
+            Object date = params.get("daterange[1]");
+            Date daterange1=new Date(date.toString());
+            params.put("daterange1",daterange1);
+        }
         //查询列表数据
         Query query = new Query(params);
 
@@ -313,4 +327,62 @@ public class BReservationcardController {
         }
         return R.ok();
     }
+
+    @RequestMapping("/downData")
+    @ResponseBody
+    public R downData(@RequestBody Map<String, Object> params, HttpServletResponse response) {
+        try{
+            List<Map<String, Object>> cardInfo = (List) params.get("cardInfo");
+            if (cardInfo != null && cardInfo.size() > 0) {
+                for (Map<String, Object> map : cardInfo) {
+                    BReservationCardPage entity = JSON.parseObject(JSON.toJSONString(map), BReservationCardPage.class);
+                    BReservationCardPageList.add(entity);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return R.ok();
+    }
+
+    @RequestMapping("/downExcel")
+    @ResponseBody
+    public R downExcel(HttpServletResponse response) {
+        String now = DateUtils.format(new Date(),"yyyyMMdd");
+        ExcelExport ee1 = new ExcelExport(now+"-预约卡信息");
+        try{
+            List<Object[]> list1 = new ArrayList<Object[]>();
+            for (BReservationCardPage page:
+            BReservationCardPageList) {
+                List<Object> obj = new ArrayList<Object>();
+                obj.add(page.getCardcode());
+                obj.add(page.getPassword());
+                obj.add(page.getUsername());
+                obj.add(page.getSex());
+                obj.add(page.getIdentitycard());
+                obj.add(page.getPhobenumber());
+                obj.add(page.getMedicalcode());
+                obj.add(page.getMedicaldate());
+                obj.add(page.getCardstatus());
+                obj.add(page.getSendaddress());
+                obj.add(page.getModifyFlag());
+                obj.add(page.getSetMeal());
+                obj.add(page.getStartDate());
+                obj.add(page.getEndDate());
+                obj.add(page.getInserttime());
+                obj.add(page.getOperatetime());
+                list1.add(obj.toArray());
+
+            }
+            String[] header = new String[]{"卡号","密码","姓名","性别","身份证号","手机号","体检机构","体检日期","医疗卡状态","寄送地址","信息编辑","预约套餐","有效日期起期","有效日期止期","插入时间","更新时间"};
+            ee1.addSheetByArray("预约卡信息", list1, header);
+            ee1.export(response);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        BReservationCardPageList.clear();
+        return R.ok();
+    }
+
 }

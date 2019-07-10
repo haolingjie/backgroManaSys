@@ -61,6 +61,8 @@ $(function () {
 					return transDate(value);}},
 			{label: '更新时间', name: 'operatetime', index: 'operateTime', width: 80, formatter: function (value) {
 					return transDate(value);}},],
+		rowList: [10, 30, 50, 100, 3000, 5000, 1000],
+		rowNum: 10,
     });
     /*Ajax.request({
         url: "../umedicalecenter/getAll",
@@ -104,6 +106,7 @@ let vm = new Vue({
 		q: {
 		    name: '',
 			cardstatus: '',
+			daterange: '',
 
 		}
 	},
@@ -173,7 +176,7 @@ let vm = new Vue({
 			vm.showList = true;
             let page = $("#jqGrid").jqGrid('getGridParam', 'page');
 			$("#jqGrid").jqGrid('setGridParam', {
-                postData: {'name': vm.q.name,'cardstatus':vm.q.cardstatus},
+                postData: {'name': vm.q.name,'cardstatus':vm.q.cardstatus,'daterange':vm.q.daterange},
                 page: page
             }).trigger("reloadGrid");
             vm.handleReset('formValidate');
@@ -214,5 +217,25 @@ let vm = new Vue({
 		getMedicalCode: function (val) {
 			vm.bReservationcard.medicalcode=val;
 		},
+		downData: function (val) {
+			var obj=$("#jqGrid").jqGrid("getRowData");
+            var allID = $("#jqGrid").jqGrid('getDataIDs'); //这里获取所有行 主键id 是全的
+            obj.push($("#jqGrid").jqGrid('getRowData', allID[allID.length-1]));
+			var data={cardInfo : obj};
+            var url="../breservationcard/downData";
+            // window.open(url);
+			Ajax.request({
+				url: url,
+				params: JSON.stringify(data),
+				type: "POST",
+                async: false,
+				contentType: "application/json",
+				successCallback: function (r) {
+					// alert('数据导出成功', function (index) {
+					// });
+				}
+			});
+            window.open("../breservationcard/downExcel");
+		}
 	}
 });
