@@ -189,6 +189,9 @@ public class BReservationcardController {
                 if(data != null && data.length>0){
                     BReservationcardEntity bReservationcardEntity = new BReservationcardEntity();
                     if(data.length>0) {
+                        if(StringUtils.isBlank(data[0]) ||  StringUtils.isBlank(data[0].trim())){
+                            continue;
+                        }
                         UDataRuleEntity entity = new UDataRuleEntity();
                         entity.setRulecode("cardCode");
                         entity.setRuleoption(StringUtils.isBlank(data[0]) ? "" : data[0].trim());
