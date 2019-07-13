@@ -90,6 +90,8 @@ let vm = new Vue({
 		},
 		saveCenterInfo: function (event) {
 			var obj=$("#jqGrid").jqGrid("getRowData");
+			var allID = $("#jqGrid").jqGrid('getDataIDs'); //这里获取所有行 主键id 是全的
+			obj.push($("#jqGrid").jqGrid('getRowData', allID[allID.length-1]));
 			var data={centerInfo : obj};
 			let url = "../umedicalecenter/saveCenterInfo";
 			Ajax.request({

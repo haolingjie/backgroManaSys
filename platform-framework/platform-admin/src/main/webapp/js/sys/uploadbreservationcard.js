@@ -80,7 +80,7 @@ let vm = new Vue({
 		},
 		saveOrUpdate: function (event) {
             let url = '../breservationcard/saveCardInf';
-			var obj=$("#jqGrid").jqGrid("getRowData");
+			// var obj=$("#jqGrid").jqGrid("getRowData");
 
 			Ajax.request({
 			    url: url,
@@ -100,6 +100,9 @@ let vm = new Vue({
 				return;
 			}
 			var obj=$("#jqGrid").jqGrid("getRowData");
+			var allID = $("#jqGrid").jqGrid('getDataIDs'); //这里获取所有行 主键id 是全的
+			obj.push($("#jqGrid").jqGrid('getRowData', allID[allID.length-1]));
+
 			var data={cardInfo : obj,modifyFlag : vm.q.modifyFlag};
 			let url = "../breservationcard/saveCardInfo";
 			Ajax.request({

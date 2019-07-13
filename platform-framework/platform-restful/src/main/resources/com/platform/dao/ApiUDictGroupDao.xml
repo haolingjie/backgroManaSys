@@ -44,6 +44,9 @@
 		<if test="groupCode != null and groupCode.trim() != ''">
 			AND groupCode =#{groupCode}
 		</if>
+		<if test="categoryCode != null and categoryCode.trim() != ''">
+			AND categoryCode =#{categoryCode}
+		</if>
 		<if test="validstatus != null and validstatus.trim() != ''">
 			AND validstatus =#{validstatus}
 		</if>
